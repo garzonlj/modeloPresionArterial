@@ -1,0 +1,18 @@
+Test: 23957 filas | real=0: 18885 | real=3: 487 | real>0 (riesgo): 5072
+
+ thr_3  falso-3 (%real=0)  sens-3 (%real=3)  sens-riesgo (>0)
+  0.50               1.6%             54.6%             69.8%
+  0.35               1.7%             57.3%             69.9%
+  0.25               3.3%             64.1%             70.6%
+  0.20               6.1%             70.0%             72.1%
+  0.15              11.4%             74.3%             74.5%
+  0.10              22.6%             81.5%             79.7%
+  0.08              29.8%             84.0%             82.5%
+  0.05              46.6%             89.3%             88.2%
+
+=== Matriz de confusion con argmax puro (thr_3 implicito ~0.25-0.33 segun clase) ===
+        pred=0  pred=1  pred=2  pred=3
+real=0    15462    2267     852     304
+real=1     1069    1447     377     100
+real=2      365     441     671     115
+real=3       96      41      84     266

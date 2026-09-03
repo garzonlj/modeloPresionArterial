@@ -1,0 +1,32 @@
+{
+  "feature_names": [
+    "rise_time",
+    "width_25",
+    "width_50",
+    "width_75",
+    "notch_time",
+    "amplitude",
+    "max_d1",
+    "max_d2",
+    "min_d2",
+    "d2_ratio",
+    "heart_rate",
+    "area_ratio",
+    "notch_depth_ratio",
+    "aug_index",
+    "spectral_ratio"
+  ],
+  "tipo": "RandomForestClassifier multiclase (0/1/2/3 puntos NEWS-2 de presion sistolica)",
+  "decision_rule": "pred = argmax(proba); si proba[clase 3] >= 0.20, forzar prediccion = 3 (prioriza deteccion de casos severos, que disparan la regla de escalamiento individual de NEWS-2 independientemente del puntaje total)",
+  "threshold_class_3": 0.2,
+  "output": "puntos NEWS-2 de presion sistolica (0, 1, 2 o 3), para sumar al score NEWS-2 total",
+  "evaluado_en_test_sin_fuga": {
+    "sensibilidad_clase_3_default_argmax": "54.6%",
+    "sensibilidad_clase_3_con_threshold_0.20": "70.0%",
+    "falso_positivo_clase_3_con_threshold_0.20": "6.1% (de casos realmente normales)",
+    "sensibilidad_riesgo_agregado_puntos>0": "72.1%",
+    "exactitud_exacta_4_clases": "74.5%",
+    "exactitud_tolerancia_1_punto": "92.7%"
+  },
+  "nota": "Este modelo NO estima mmHg exactos. Clasifica el nivel de riesgo de presion sistolica en la escala NEWS-2 (0-3 puntos), pensado para sumarse a los otros 6 parametros del score NEWS-2 total, no para usarse de forma aislada."
+}

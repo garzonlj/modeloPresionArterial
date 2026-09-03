@@ -1,0 +1,33 @@
+Dataset: 119880 filas, 11022 registros unicos
+Train: 95923 filas (8817 registros)
+Test:  23957 filas (2205 registros)
+OK: sin overlap de record_id entre train y test
+
+=== Resultados en test (ventanas de 10 latidos, sin fuga) ===
+MAE: 12.66 mmHg
+Error medio (bias): 0.71 mmHg
+Desviacion estandar del error: 16.68 mmHg
+
+=== Comparacion con estandar AAMI ===
+  |error medio| = 0.71 mmHg -> CUMPLE
+  desviacion estandar = 16.68 mmHg -> NO CUMPLE
+  Resultado: NO CUMPLE AAMI
+
+=== Importancia de features ===
+  max_d2       0.1264
+  notch_time   0.1104
+  width_75     0.1027
+  spectral_ratio 0.1017
+  area_ratio   0.0741
+  d2_ratio     0.0665
+  heart_rate   0.0642
+  notch_depth_ratio 0.0578
+  width_25     0.0512
+  width_50     0.0511
+  rise_time    0.0462
+  aug_index    0.0443
+  min_d2       0.0443
+  amplitude    0.0389
+  max_d1       0.0203
+
+Modelo guardado en: models/rf_systolic_bp_windowed.pkl (8.0 MB)
