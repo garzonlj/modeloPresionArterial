@@ -1,11 +1,23 @@
 
 import code
+import os
+import sys
 import time
 import smbus
 import datetime
+from collections import deque
+
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "scripts"))
+from news2_live import (
+    load_bp_model, estimate_bp_points, estimate_rr, aggregate_news2,
+    points_hr, points_spo2, points_temp, points_rr,
+    points_oxygen, points_consciousness,
+)
+from senml import build_senml, senml_to_json
 
 I2C_BUS_NUM = 1
 REPORTING_PERIOD_S = 1.0
+NEWS2_PERIOD_S = 10.0
 
 bus = smbus.SMBus(I2C_BUS_NUM)
 
@@ -287,6 +299,10 @@ class SignalProcessor:
         return round(self.spo2_smooth)
 
 
+OXIGENO_ACTIVO = False
+CONSCIENTE = True
+
+
 def main():
     print("Iniciando MLX90614...")
     try:
@@ -306,6 +322,20 @@ def main():
         proc = None
         print(" FALLÓ ->", e)
 
+    try:
+        bp_clf = load_bp_model()
+        print("Modelo PA cargado")
+    except Exception as e:
+        bp_clf = None
+        print("Error cargando modelo PA ->", e)
+
+    ir_buf = deque(maxlen=60 * 100)
+    last_news2 = 0.0
+    news2_txt = "NEWS-2: calculando..."
+
+    senml_name = datetime.datetime.now().strftime("datos_senml_%Y%m%d_%H%M%S.jsonl")
+    senml_f = open(senml_name, "a", encoding="utf-8")
+
     last_report = time.time()
     registros = []
 
@@ -324,6 +354,7 @@ def main():
                         # El procesador de señal toma los valores IR y rojo,
                         #  separa AC/DC, detecta latidos y calcula BPM y SpO2
                         proc.process(ir, red)
+                        ir_buf.append(ir)
                 except Exception as e:
                     print("Error leyendo MAX30100:", e)
 
@@ -338,9 +369,42 @@ def main():
                 bpm = proc.get_bpm() if proc else 0
                 spo2 = proc.get_spo2() if proc else 0
 
+                if proc and now - last_news2 > NEWS2_PERIOD_S:
+                    rr = estimate_rr(ir_buf)
+                    bp_p = estimate_bp_points(bp_clf, ir_buf)
+                    pts = {
+                        "hr": points_hr(bpm),
+                        "spo2": points_spo2(spo2),
+                        "temp": points_temp(temp_objeto),
+                        "rr": points_rr(rr),
+                        "pa": bp_p,
+                        "oxigeno": points_oxygen(OXIGENO_ACTIVO),
+                        "consciencia": points_consciousness(CONSCIENTE),
+                    }
+                    res = aggregate_news2(pts)
+                    news2_txt = (
+                        f"RR: {round(rr) if rr else 'N/D'} rpm | "
+                        f"PA puntos: {bp_p if bp_p is not None else 'N/D'} | "
+                        f"NEWS-2: {res['total']} ({res['level']})"
+                    )
+                    last_news2 = now
+
+                    temp_val = None if temp_objeto != temp_objeto else round(temp_objeto, 2)
+                    lectura = {
+                        "max30100:hr": bpm if bpm > 0 else None,
+                        "max30100:spo2": spo2 if spo2 > 0 else None,
+                        "mlx90614:temp": temp_val,
+                        "resp_rate": round(rr) if rr else None,
+                        "sbp_news2_points": bp_p,
+                        "news2_total": res["total"],
+                        "news2_level": res["level_code"],
+                    }
+                    senml_f.write(senml_to_json(build_senml(lectura)) + "\n")
+                    senml_f.flush()
+
                 linea = (
                     f"Temp corporal: {temp_objeto:.2f} C | "
-                    f"BPM: {bpm} | SpO2: {spo2}%"
+                    f"BPM: {bpm} | SpO2: {spo2}% | {news2_txt}"
                 )
                 print(linea)
 
@@ -355,6 +419,7 @@ def main():
         print("\nFinalizado por el usuario")
 
     finally:
+        senml_f.close()
         if registros:
             nombre_archivo = datetime.datetime.now().strftime(
                 "datos_sensores_%Y%m%d_%H%M%S.txt"

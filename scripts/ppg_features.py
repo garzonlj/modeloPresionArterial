@@ -1,6 +1,8 @@
 import numpy as np
 from scipy.signal import butter, filtfilt, find_peaks
 
+_trapz = getattr(np, "trapezoid", None) or np.trapz
+
 FS_TARGET = 125.0
 
 REFERENCE_AMPLITUDE = 1.76
@@ -117,8 +119,8 @@ def extract_cycle_features(ppg_filt, onset, peak, next_onset, fs=FS_TARGET):
 
     heart_rate = 60.0 / ((next_onset - onset) / fs)
 
-    sys_area = float(np.trapezoid(ppg_filt[onset:peak + 1] - foot_level, dx=dt))
-    dia_area = float(np.trapezoid(ppg_filt[peak:next_onset + 1] - foot_level, dx=dt))
+    sys_area = float(_trapz(ppg_filt[onset:peak + 1] - foot_level, dx=dt))
+    dia_area = float(_trapz(ppg_filt[peak:next_onset + 1] - foot_level, dx=dt))
     area_ratio = sys_area / dia_area if dia_area > 0 else 0.0
 
     notch_idx = min(peak + int(round(notch_time * fs)), next_onset)
