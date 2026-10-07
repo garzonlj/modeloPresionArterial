@@ -2,13 +2,16 @@ import json
 import os
 import time
 
+import certifi
 import paho.mqtt.publish as publish
 
 from senml import build_senml
 
 MQTT_HOST = "mqtt3.thingspeak.com"
-MQTT_PORT = 1883
+MQTT_PORT = 8883
 MIN_INTERVAL_S = 15
+
+TLS_CONFIG = {"ca_certs": certifi.where()}
 
 FIELD_MAP = {
     "max30100:hr": "field1",
@@ -19,28 +22,30 @@ FIELD_MAP = {
     "news2_total": "field6",
 }
 
+FIELD_ORDER = list(FIELD_MAP.keys())
+
 CONFIG_PATH = os.path.join(os.path.dirname(__file__), "thingspeak_config.json")
 
 
 def load_config(path=CONFIG_PATH):
     with open(path, "r", encoding="utf-8") as f:
         cfg = json.load(f)
-    return cfg["channel_id"], cfg["write_api_key"]
+    return cfg["channel_id"], cfg["mqtt_client_id"], cfg["mqtt_username"], cfg["mqtt_password"]
 
 
-def senml_to_thingspeak_payload(records):
-    parts = []
-    for rec in records:
-        name = rec.get("n")
-        if name in FIELD_MAP:
-            parts.append(f"{FIELD_MAP[name]}={rec['v']}")
-    return "&".join(parts)
+def build_field_message(channel_id, name, value):
+    field = FIELD_MAP[name]
+    topic = f"channels/{channel_id}/publish/fields/{field}"
+    return topic, str(value)
 
 
 class ThingSpeakPublisher:
-    def __init__(self, channel_id, write_api_key):
-        self.topic = f"channels/{channel_id}/publish/{write_api_key}"
+    def __init__(self, channel_id, mqtt_client_id, mqtt_username, mqtt_password):
+        self.channel_id = channel_id
+        self.client_id = mqtt_client_id
+        self.auth = {"username": mqtt_username, "password": mqtt_password}
         self._last_sent = 0.0
+        self._next_idx = 0
 
     def can_send(self):
         return time.time() - self._last_sent >= MIN_INTERVAL_S
@@ -48,10 +53,22 @@ class ThingSpeakPublisher:
     def publish(self, readings, timestamp=None):
         if not self.can_send():
             return False
+
         records = build_senml(readings, timestamp=timestamp)
-        payload = senml_to_thingspeak_payload(records)
-        if not payload:
+        values = {rec["n"]: rec["v"] for rec in records if rec.get("n") in FIELD_MAP}
+        if not values:
             return False
-        publish.single(self.topic, payload, hostname=MQTT_HOST, port=MQTT_PORT)
-        self._last_sent = time.time()
-        return True
+
+        for _ in range(len(FIELD_ORDER)):
+            name = FIELD_ORDER[self._next_idx]
+            self._next_idx = (self._next_idx + 1) % len(FIELD_ORDER)
+            if name in values:
+                topic, payload = build_field_message(self.channel_id, name, values[name])
+                publish.single(
+                    topic, payload,
+                    hostname=MQTT_HOST, port=MQTT_PORT,
+                    client_id=self.client_id, auth=self.auth, tls=TLS_CONFIG,
+                )
+                self._last_sent = time.time()
+                return True
+        return False

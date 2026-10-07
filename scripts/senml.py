@@ -1,5 +1,6 @@
 import json
 import time
+import datetime
 
 NODE_ID = "urn:dev:pi3-001:"
 SENML_VERSION = 5
@@ -26,6 +27,7 @@ def build_senml(readings, timestamp=None):
         if first:
             rec["bn"] = NODE_ID
             rec["bt"] = ts
+            rec["bt_legible"] = datetime.datetime.fromtimestamp(ts).strftime("%Y-%m-%d %H:%M:%S")
             rec["bver"] = SENML_VERSION
             first = False
         rec["n"] = name

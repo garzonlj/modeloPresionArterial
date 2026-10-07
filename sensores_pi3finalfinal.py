@@ -14,6 +14,7 @@ from news2_live import (
     points_oxygen, points_consciousness,
 )
 from senml import build_senml, senml_to_json
+from thingspeak_mqtt import ThingSpeakPublisher, load_config as load_thingspeak_config
 
 I2C_BUS_NUM = 1
 REPORTING_PERIOD_S = 1.0
@@ -329,6 +330,14 @@ def main():
         bp_clf = None
         print("Error cargando modelo PA ->", e)
 
+    try:
+        ts_channel, ts_client_id, ts_username, ts_password = load_thingspeak_config()
+        ts_pub = ThingSpeakPublisher(ts_channel, ts_client_id, ts_username, ts_password)
+        print("ThingSpeak configurado")
+    except Exception as e:
+        ts_pub = None
+        print("Error configurando ThingSpeak ->", e)
+
     ir_buf = deque(maxlen=60 * 100)
     last_news2 = 0.0
     news2_txt = "NEWS-2: calculando..."
@@ -401,6 +410,12 @@ def main():
                     }
                     senml_f.write(senml_to_json(build_senml(lectura)) + "\n")
                     senml_f.flush()
+
+                    if ts_pub:
+                        try:
+                            ts_pub.publish(lectura)
+                        except Exception as e:
+                            print("Error publicando a ThingSpeak ->", e)
 
                 linea = (
                     f"Temp corporal: {temp_objeto:.2f} C | "

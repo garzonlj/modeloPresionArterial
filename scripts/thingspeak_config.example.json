@@ -1,4 +1,7 @@
 {
   "channel_id": "TU_CHANNEL_ID",
-  "write_api_key": "TU_WRITE_API_KEY"
+  "write_api_key": "TU_WRITE_API_KEY",
+  "mqtt_client_id": "TU_MQTT_CLIENT_ID",
+  "mqtt_username": "TU_MQTT_USERNAME",
+  "mqtt_password": "TU_MQTT_PASSWORD"
 }

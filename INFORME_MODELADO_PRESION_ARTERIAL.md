@@ -178,7 +178,49 @@ Por eso el modelo final es **multiclase** (predice 0/1/2/3 puntos directamente, 
 
 ---
 
-## 9. Resumen ejecutivo (para metodología de tesis)
+## 9. Integración en tiempo real y transmisión de datos
+
+### Raspberry Pi (`sensores_pi3finalfinal.py`)
+- BPM y SpO2: métodos originales (detección de picos con histéresis, razón RMS AC/DC), sin cambios.
+- Temperatura: MLX90614 con offset de calibración fijo, sin cambios.
+- Frecuencia respiratoria (`scripts/respiratory_rate.py`): filtro pasa-banda 0.1-0.5 Hz sobre 60 s de señal IR cruda, validado con señales sintéticas.
+- Presión sistólica: el clasificador NEWS-2 de este informe, aplicado sobre ventanas de 10 latidos con reescalado de amplitud (`ppg_features.normalize_to_reference_scale`) para compatibilizar la escala ADC del MAX30100 con la escala de entrenamiento del dataset Kachuee/UCI.
+- Cada 10 s se calcula el score NEWS-2 agregado (`scripts/news2_live.py`) y se arma un mensaje SENML (`scripts/senml.py`, RFC 8428), que se guarda localmente y se publica a ThingSpeak.
+
+### Transmisión: MQTT a ThingSpeak
+- Canal **VIGIA** (ID 3522139), un canal por dispositivo/paciente (en esta tesis, un solo Raspberry Pi).
+- Broker `mqtt3.thingspeak.com`, puerto **8883 (TLS)**, autenticado con credenciales de dispositivo MQTT (Client ID, usuario, contraseña — distintas de las API keys del canal).
+- **Un tópico por variable**, en rotación de 15 s para respetar el límite de ThingSpeak (una escritura por canal cada 15 s):
+
+| Tópico | Variable |
+|---|---|
+| `channels/3522139/publish/fields/field1` | Frecuencia cardíaca |
+| `channels/3522139/publish/fields/field2` | SpO2 |
+| `channels/3522139/publish/fields/field3` | Temperatura corporal |
+| `channels/3522139/publish/fields/field4` | Frecuencia respiratoria |
+| `channels/3522139/publish/fields/field5` | Puntos NEWS-2 de presión arterial |
+| `channels/3522139/publish/fields/field6` | Puntaje NEWS-2 total |
+
+Formato de tópico fijado por la especificación de ThingSpeak (`channels/<ID>/publish/fields/field<N>`), no configurable.
+
+### Presentación en la app: categoría de riesgo, no mmHg
+La app (Kotlin) muestra la presión arterial como **categoría de riesgo**, no como valor en mmHg, porque el modelo no produce una estimación continua confiable (ver secciones 3 y 8). Mapeo directo desde `field5` (`sbp_news2_points`):
+
+| Puntos (`sbp_news2_points`) | Etiqueta en la app | Color sugerido |
+|---|---|---|
+| 0 | Normal | Verde |
+| 1 | Riesgo bajo | Amarillo |
+| 2 | Riesgo medio | Naranja |
+| 3 | Riesgo alto | Rojo |
+
+Consistente con las demás tarjetas de signos vitales de la app (HR, SpO2, temperatura, RR), que también muestran categoría normal/anormal.
+
+### Autenticación de las apps: Firebase
+Firebase Auth se usa **exclusivamente para login y registro** de usuarios de las apps (web y móvil) — no almacena datos de sensores. Los datos de signos vitales viven únicamente en ThingSpeak; las apps los consultan por su API REST o por suscripción MQTT a los mismos tópicos.
+
+---
+
+## 10. Resumen ejecutivo (para metodología de tesis)
 
 1. Se construyó un pipeline completo de extracción de features PPG (15 features/ciclo) y su emparejamiento con presión sistólica real desde el dataset Kachuee/UCI (119,880 ventanas, 11,022 registros).
 2. La estimación de presión arterial **absoluta** en mmHg mediante Random Forest sobre PPG de un solo sensor, sin calibración, **no cumple el estándar AAMI** (SD=16.68 mmHg vs 8 mmHg requerido). Se descartó sistemáticamente, con evidencia experimental, que la causa fuera: capacidad del modelo, cantidad de datos, especialización por subgrupos, o ruido de medición — el 85% del error es sesgo sistemático entre pacientes.
