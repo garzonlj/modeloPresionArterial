@@ -2,6 +2,7 @@
 import code
 import os
 import sys
+import threading
 import time
 import smbus
 import datetime
@@ -100,6 +101,15 @@ class MAX30100:
         wr_ptr = self.bus.read_byte_data(self.address, REG_FIFO_WR_PTR)
         rd_ptr = self.bus.read_byte_data(self.address, REG_FIFO_RD_PTR)
         return (wr_ptr - rd_ptr) % 16
+
+    # Si pasa mucho tiempo (cargar el modelo, configurar ThingSpeak, etc.)
+    # entre que el sensor arranca a muestrear y que se empieza a leer el FIFO,
+    # este se desborda (solo aguanta 16 muestras, ~160ms) y queda atascado
+    # con wr_ptr=rd_ptr para siempre. Por eso se vacia justo antes de leerlo.
+    def flush_fifo(self):
+        self.bus.write_byte_data(self.address, REG_FIFO_WR_PTR, 0x00)
+        self.bus.write_byte_data(self.address, REG_OVF_COUNTER, 0x00)
+        self.bus.write_byte_data(self.address, REG_FIFO_RD_PTR, 0x00)
     
 
     def read_sample(self):
@@ -240,6 +250,13 @@ class SignalProcessor:
             self.last_beat_time = now
 
     def get_bpm(self):
+        # Si no se detecta un latido nuevo en mas de 3 segundos, se asume que
+        # se perdio la señal (dedo retirado) y se reinicia en vez de quedar
+        # atascado en el ultimo valor calculado.
+        if self.last_beat_time > 0 and time.time() - self.last_beat_time > 3.0:
+            self.beat_intervals = []
+            self.bpm_smooth = 0.0
+
         #Si hay menos de 2 intervalos de latido registrados,
         #  devuelve el BPM suavizado actual (que podría ser 0 al inicio).
         if len(self.beat_intervals) < 2:
@@ -256,7 +273,12 @@ class SignalProcessor:
         return round(self.bpm_smooth)
 
     def get_spo2(self):
-        #Si no hay suficientes datos (menos de 100 muestras AC) o 
+        # Mismo criterio que get_bpm: sin latido reciente, no hay dedo puesto,
+        # asi que no tiene sentido seguir mostrando el ultimo SpO2 calculado.
+        if self.last_beat_time > 0 and time.time() - self.last_beat_time > 3.0:
+            self.spo2_smooth = 0.0
+
+        #Si no hay suficientes datos (menos de 100 muestras AC) o
         # si los valores DC son nulos, devuelve el SpO2 suavizado actual.
         if len(self.ir_ac_hist) < 100 or self.ir_dc in (None, 0) or self.red_dc in (None, 0):
             return round(self.spo2_smooth)
@@ -304,6 +326,72 @@ OXIGENO_ACTIVO = False
 CONSCIENTE = True
 
 
+class EstadoCompartido:
+    def __init__(self):
+        self.lock = threading.Lock()
+        self.bpm = 0
+        self.spo2 = 0
+        self.temp_objeto = float("nan")
+        self.news2_txt = "NEWS-2: calculando..."
+        self.detener = False
+
+
+def trabajador_news2(estado, ir_buf, bp_clf, ts_pub, senml_f):
+    while not estado.detener:
+        time.sleep(NEWS2_PERIOD_S)
+
+        with estado.lock:
+            bpm = estado.bpm
+            spo2 = estado.spo2
+            temp_objeto = estado.temp_objeto
+
+        ir_snapshot = list(ir_buf)
+
+        try:
+            rr = estimate_rr(ir_snapshot)
+            bp_p = estimate_bp_points(bp_clf, ir_snapshot)
+            pts = {
+                "hr": points_hr(bpm),
+                "spo2": points_spo2(spo2),
+                "temp": points_temp(temp_objeto),
+                "rr": points_rr(rr),
+                "pa": bp_p,
+                "oxigeno": points_oxygen(OXIGENO_ACTIVO),
+                "consciencia": points_consciousness(CONSCIENTE),
+            }
+            res = aggregate_news2(pts)
+            texto = (
+                f"RR: {round(rr) if rr else 'N/D'} rpm | "
+                f"PA puntos: {bp_p if bp_p is not None else 'N/D'} | "
+                f"NEWS-2: {res['total']} ({res['level']})"
+            )
+
+            temp_val = None if temp_objeto != temp_objeto else round(temp_objeto, 2)
+            lectura = {
+                "max30100:hr": bpm if bpm > 0 else None,
+                "max30100:spo2": spo2 if spo2 > 0 else None,
+                "mlx90614:temp": temp_val,
+                "resp_rate": round(rr) if rr else None,
+                "sbp_news2_points": bp_p,
+                "news2_total": res["total"],
+                "news2_level": res["level_code"],
+            }
+            senml_f.write(senml_to_json(build_senml(lectura)) + "\n")
+            senml_f.flush()
+
+            if ts_pub:
+                try:
+                    ts_pub.publish(lectura)
+                except Exception as e:
+                    print("Error publicando a ThingSpeak ->", e)
+
+            with estado.lock:
+                estado.news2_txt = texto
+
+        except Exception as e:
+            print("Error en hilo NEWS-2 ->", e)
+
+
 def main():
     print("Iniciando MLX90614...")
     try:
@@ -339,25 +427,46 @@ def main():
         print("Error configurando ThingSpeak ->", e)
 
     ir_buf = deque(maxlen=60 * 100)
-    last_news2 = 0.0
-    news2_txt = "NEWS-2: calculando..."
 
     senml_name = datetime.datetime.now().strftime("datos_senml_%Y%m%d_%H%M%S.jsonl")
     senml_f = open(senml_name, "a", encoding="utf-8")
 
+    estado = EstadoCompartido()
+    hilo = None
+    if proc:
+        hilo = threading.Thread(
+            target=trabajador_news2,
+            args=(estado, ir_buf, bp_clf, ts_pub, senml_f),
+            daemon=True,
+        )
+        hilo.start()
+
     last_report = time.time()
     registros = []
+    last_sample_time = time.time()
+    FIFO_STALL_S = 1.0
 
-
+    if pox:
+        # Vaciar el FIFO justo antes de empezar a leerlo: todo lo anterior
+        # (cargar el modelo, configurar ThingSpeak) pudo haber tardado mas
+        # de 160ms y desbordarlo mientras nadie lo leia.
+        try:
+            pox.flush_fifo()
+        except Exception as e:
+            print("Error vaciando el FIFO del MAX30100:", e)
 
     try:
         while True:
             if pox:
                 # Lee todas las muestras disponibles en la FIFO del MAX30100
-                #  y procesa cada par de valores IR y rojo.
-                
+                #  y procesa cada par de valores IR y rojo. Este bucle debe
+                #  mantenerse rapido: el FIFO del MAX30100 solo guarda 16
+                #  muestras (~160ms a 100 muestras/s), asi que nada pesado
+                #  (NEWS-2, modelo, ThingSpeak) puede correr aqui adentro.
                 try:
                     n = pox.available_samples()
+                    if n > 0:
+                        last_sample_time = time.time()
                     for _ in range(n):
                         ir, red = pox.read_sample()
                         # El procesador de señal toma los valores IR y rojo,
@@ -366,6 +475,24 @@ def main():
                         ir_buf.append(ir)
                 except Exception as e:
                     print("Error leyendo MAX30100:", e)
+                    # Un error I2C (cable flojo, ruido) puede coincidir con
+                    # que el FIFO se desborde mientras no se pudo leer. Se
+                    # vacia de inmediato para no quedar atascado en wr_ptr=rd_ptr.
+                    try:
+                        pox.flush_fifo()
+                    except Exception:
+                        pass
+                    last_sample_time = time.time()
+
+                # Si llevamos mas de FIFO_STALL_S sin recibir ninguna muestra
+                # nueva (el FIFO quedo en wr_ptr=rd_ptr sin lanzar error I2C),
+                # se asume que esta congelado y se vacia para destrabarlo.
+                if time.time() - last_sample_time > FIFO_STALL_S:
+                    try:
+                        pox.flush_fifo()
+                    except Exception as e:
+                        print("Error vaciando el FIFO (watchdog):", e)
+                    last_sample_time = time.time()
 
             now = time.time()
             if now - last_report > REPORTING_PERIOD_S:
@@ -378,48 +505,25 @@ def main():
                 bpm = proc.get_bpm() if proc else 0
                 spo2 = proc.get_spo2() if proc else 0
 
-                if proc and now - last_news2 > NEWS2_PERIOD_S:
-                    rr = estimate_rr(ir_buf)
-                    bp_p = estimate_bp_points(bp_clf, ir_buf)
-                    pts = {
-                        "hr": points_hr(bpm),
-                        "spo2": points_spo2(spo2),
-                        "temp": points_temp(temp_objeto),
-                        "rr": points_rr(rr),
-                        "pa": bp_p,
-                        "oxigeno": points_oxygen(OXIGENO_ACTIVO),
-                        "consciencia": points_consciousness(CONSCIENTE),
-                    }
-                    res = aggregate_news2(pts)
-                    news2_txt = (
-                        f"RR: {round(rr) if rr else 'N/D'} rpm | "
-                        f"PA puntos: {bp_p if bp_p is not None else 'N/D'} | "
-                        f"NEWS-2: {res['total']} ({res['level']})"
-                    )
-                    last_news2 = now
+                with estado.lock:
+                    estado.bpm = bpm
+                    estado.spo2 = spo2
+                    estado.temp_objeto = temp_objeto
+                    news2_txt = estado.news2_txt
 
-                    temp_val = None if temp_objeto != temp_objeto else round(temp_objeto, 2)
-                    lectura = {
-                        "max30100:hr": bpm if bpm > 0 else None,
-                        "max30100:spo2": spo2 if spo2 > 0 else None,
-                        "mlx90614:temp": temp_val,
-                        "resp_rate": round(rr) if rr else None,
-                        "sbp_news2_points": bp_p,
-                        "news2_total": res["total"],
-                        "news2_level": res["level_code"],
-                    }
-                    senml_f.write(senml_to_json(build_senml(lectura)) + "\n")
-                    senml_f.flush()
-
-                    if ts_pub:
-                        try:
-                            ts_pub.publish(lectura)
-                        except Exception as e:
-                            print("Error publicando a ThingSpeak ->", e)
+                # DIAGNOSTICO TEMPORAL: muestra la amplitud real de la señal IR
+                # y el umbral que se necesita superar para contar un latido.
+                # Sirve para saber si el sensor esta viendo pulso o no.
+                diag = ""
+                if proc and proc.ir_ac_hist:
+                    recientes = proc.ir_ac_hist[-20:]
+                    swing = max(recientes) - min(recientes)
+                    umbral = 0.55 * proc.ac_max_recent
+                    diag = f" | IR_AC:{swing:.0f} umbral:{umbral:.0f}"
 
                 linea = (
                     f"Temp corporal: {temp_objeto:.2f} C | "
-                    f"BPM: {bpm} | SpO2: {spo2}% | {news2_txt}"
+                    f"BPM: {bpm} | SpO2: {spo2}%{diag} | {news2_txt}"
                 )
                 print(linea)
 
@@ -434,6 +538,7 @@ def main():
         print("\nFinalizado por el usuario")
 
     finally:
+        estado.detener = True
         senml_f.close()
         if registros:
             nombre_archivo = datetime.datetime.now().strftime(
