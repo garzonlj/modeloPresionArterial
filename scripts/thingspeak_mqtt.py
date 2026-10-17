@@ -20,6 +20,7 @@ FIELD_MAP = {
     "resp_rate": "field4",
     "sbp_news2_points": "field5",
     "news2_total": "field6",
+    "node_id": "field7",
 }
 
 FIELD_ORDER = list(FIELD_MAP.keys())
@@ -46,6 +47,7 @@ class ThingSpeakPublisher:
         self.auth = {"username": mqtt_username, "password": mqtt_password}
         self._last_sent = 0.0
         self._next_idx = 0
+        self._mensajes_enviados = 0
 
     def can_send(self):
         return time.time() - self._last_sent >= MIN_INTERVAL_S
@@ -70,5 +72,7 @@ class ThingSpeakPublisher:
                     client_id=self.client_id, auth=self.auth, tls=TLS_CONFIG,
                 )
                 self._last_sent = time.time()
+                self._mensajes_enviados += 1
+                print(f"[ThingSpeak] Mensaje #{self._mensajes_enviados} enviado -> {name}={payload}")
                 return True
         return False

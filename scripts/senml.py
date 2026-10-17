@@ -3,6 +3,7 @@ import time
 import datetime
 
 NODE_ID = "urn:dev:pi3-001:"
+NODE_ID_SHORT = NODE_ID.replace("urn:dev:", "").rstrip(":")
 SENML_VERSION = 5
 
 UNITS = {
@@ -13,6 +14,7 @@ UNITS = {
     "sbp_news2_points": None,
     "news2_total": None,
     "news2_level": None,
+    "node_id": None,
 }
 
 

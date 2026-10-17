@@ -14,7 +14,7 @@ from news2_live import (
     points_hr, points_spo2, points_temp, points_rr,
     points_oxygen, points_consciousness,
 )
-from senml import build_senml, senml_to_json
+from senml import build_senml, senml_to_json, NODE_ID_SHORT
 from thingspeak_mqtt import ThingSpeakPublisher, load_config as load_thingspeak_config
 
 I2C_BUS_NUM = 1
@@ -375,6 +375,7 @@ def trabajador_news2(estado, ir_buf, bp_clf, ts_pub, senml_f):
                 "sbp_news2_points": bp_p,
                 "news2_total": res["total"],
                 "news2_level": res["level_code"],
+                "node_id": NODE_ID_SHORT,
             }
             senml_f.write(senml_to_json(build_senml(lectura)) + "\n")
             senml_f.flush()
