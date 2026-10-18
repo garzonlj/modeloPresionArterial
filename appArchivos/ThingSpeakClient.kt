@@ -24,7 +24,11 @@ data class Vitales(
     val paMillis: Long? = null,
     val news2Total: String? = null,
     val news2Millis: Long? = null,
-    val nodoId: String? = null
+    val nodoId: String? = null,
+    // Hora exacta en que la Raspberry tomo la lectura (de field8, en
+    // epoca-segundos), distinta de los *Millis de arriba que son la
+    // hora en que ThingSpeak RECIBIO cada campo.
+    val piMillis: Long? = null
 )
 
 // Un punto del historico de alertas: hora y puntaje NEWS-2 total en ese momento.
@@ -89,6 +93,7 @@ object ThingSpeakClient {
         var paPuntos: String? = null; var paMillis: Long? = null
         var news2Total: String? = null; var news2Millis: Long? = null
         var nodoId: String? = null
+        var piMillis: Long? = null
 
         for (i in feeds.length() - 1 downTo 0) {
             val entrada = feeds.getJSONObject(i)
@@ -102,11 +107,13 @@ object ThingSpeakClient {
             if (news2Total == null) entrada.stringOrNull("field6")?.let { news2Total = it; news2Millis = fecha }
             // field7 (node_id) no cambia de valor, asi que no necesita su propia marca de tiempo.
             if (nodoId == null) entrada.stringOrNull("field7")?.let { nodoId = it }
+            // field8 (timestamp) viene en epoca-segundos desde la Raspberry; se pasa a millis.
+            if (piMillis == null) entrada.stringOrNull("field8")?.toLongOrNull()?.let { piMillis = it * 1000 }
         }
 
         return Vitales(
             hr, hrMillis, spo2, spo2Millis, temp, tempMillis, rr, rrMillis,
-            paPuntos, paMillis, news2Total, news2Millis, nodoId
+            paPuntos, paMillis, news2Total, news2Millis, nodoId, piMillis
         )
     }
 

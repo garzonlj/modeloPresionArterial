@@ -1,0 +1,101 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Casos de uso - App VIGIA" id="casos-uso-app-vigia">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1000" pageHeight="800" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Actor principal: Doctor/a -->
+        <mxCell id="actorDoctor" value="Doctor/a" style="shape=actor;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="40" y="340" width="40" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- Actor secundario: fuente de datos -->
+        <mxCell id="actorRaspberry" value="Raspberry Pi / ThingSpeak" style="shape=actor;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="900" y="440" width="40" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- Limite del sistema -->
+        <mxCell id="sistema" value="App VIGIA" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;fontStyle=1;fillColor=none;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="180" y="40" width="660" height="660" as="geometry" />
+        </mxCell>
+
+        <!-- Casos de uso -->
+        <mxCell id="ucLogin" value="Iniciar sesión" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="260" y="80" width="200" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ucRegistro" value="Registrarse&#10;(con foto de perfil)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="260" y="160" width="200" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ucHome" value="Ver estado actual&#10;del paciente" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="260" y="240" width="200" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ucDetalle" value="Ver detalle de&#10;signos vitales" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="260" y="320" width="200" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ucHistorico" value="Ver histórico&#10;NEWS-2" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="260" y="400" width="200" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ucAlerta" value="Recibir alerta&#10;crítica" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="560" y="400" width="200" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ucPerfil" value="Gestionar perfil" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="260" y="480" width="200" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ucLogout" value="Cerrar sesión" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="260" y="560" width="200" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Relaciones Doctor -> casos de uso -->
+        <mxCell id="eLogin" style="edgeStyle=none;html=1;endArrow=none;" edge="1" parent="1" source="actorDoctor" target="ucLogin">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eRegistro" style="edgeStyle=none;html=1;endArrow=none;" edge="1" parent="1" source="actorDoctor" target="ucRegistro">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eHome" style="edgeStyle=none;html=1;endArrow=none;" edge="1" parent="1" source="actorDoctor" target="ucHome">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eDetalle" style="edgeStyle=none;html=1;endArrow=none;" edge="1" parent="1" source="actorDoctor" target="ucDetalle">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eHistorico" style="edgeStyle=none;html=1;endArrow=none;" edge="1" parent="1" source="actorDoctor" target="ucHistorico">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ePerfil" style="edgeStyle=none;html=1;endArrow=none;" edge="1" parent="1" source="actorDoctor" target="ucPerfil">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eLogout" style="edgeStyle=none;html=1;endArrow=none;" edge="1" parent="1" source="actorDoctor" target="ucLogout">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eAlertaDoctor" style="edgeStyle=none;html=1;endArrow=none;" edge="1" parent="1" source="actorDoctor" target="ucAlerta">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- include: Ver detalle / historico incluyen traer datos de ThingSpeak -->
+        <mxCell id="eRaspHome" value="&lt;&lt;include&gt;&gt;" style="edgeStyle=none;html=1;dashed=1;endArrow=open;endFill=0;" edge="1" parent="1" source="ucHome" target="actorRaspberry">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eRaspHistorico" value="&lt;&lt;include&gt;&gt;" style="edgeStyle=none;html=1;dashed=1;endArrow=open;endFill=0;" edge="1" parent="1" source="ucHistorico" target="actorRaspberry">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eRaspAlerta" value="&lt;&lt;include&gt;&gt;" style="edgeStyle=none;html=1;dashed=1;endArrow=open;endFill=0;" edge="1" parent="1" source="ucAlerta" target="actorRaspberry">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- extend: Detalle extiende de Home -->
+        <mxCell id="eExtendDetalle" value="&lt;&lt;extend&gt;&gt;" style="edgeStyle=none;html=1;dashed=1;endArrow=open;endFill=0;" edge="1" parent="1" source="ucDetalle" target="ucHome">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -21,6 +21,7 @@ FIELD_MAP = {
     "sbp_news2_points": "field5",
     "news2_total": "field6",
     "node_id": "field7",
+    "timestamp": "field8",
 }
 
 FIELD_ORDER = list(FIELD_MAP.keys())

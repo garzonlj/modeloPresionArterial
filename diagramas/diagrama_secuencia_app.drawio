@@ -1,0 +1,165 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Secuencia - Lectura y alerta NEWS-2" id="secuencia-app-vigia">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1080" pageHeight="760" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Cabeceras de los participantes -->
+        <mxCell id="h1" value="Doctor/a" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="0" y="40" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="h2" value="Raspberry Pi&#10;(sensores_pi3finalfinal.py)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="220" y="40" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="h3" value="ThingSpeak" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="440" y="40" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="h4" value="VigiaApp&#10;(LaunchedEffect)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="660" y="40" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="h5" value="ThingSpeakClient" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="870" y="40" width="180" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- Lineas de vida -->
+        <mxCell id="ll1" style="html=1;endArrow=none;dashed=1;strokeColor=#000000;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="80" y="80" as="sourcePoint" />
+            <mxPoint x="80" y="690" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ll2" style="html=1;endArrow=none;dashed=1;strokeColor=#000000;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="300" y="80" as="sourcePoint" />
+            <mxPoint x="300" y="690" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ll3" style="html=1;endArrow=none;dashed=1;strokeColor=#000000;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="520" y="80" as="sourcePoint" />
+            <mxPoint x="520" y="690" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ll4" style="html=1;endArrow=none;dashed=1;strokeColor=#000000;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="740" y="80" as="sourcePoint" />
+            <mxPoint x="740" y="690" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ll5" style="html=1;endArrow=none;dashed=1;strokeColor=#000000;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="960" y="80" as="sourcePoint" />
+            <mxPoint x="960" y="690" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- loop A: publicacion desde la Raspberry -->
+        <mxCell id="loopA" value="loop   [cada 15s, 1 campo rotativo]" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#666666;dashed=1;align=left;verticalAlign=top;fontStyle=1;fontSize=11;spacingLeft=6;spacingTop=2;" vertex="1" parent="1">
+          <mxGeometry x="240" y="95" width="300" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="msg1" value="MQTT publish(fieldN, valor) — SenML" style="html=1;endArrow=block;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="300" y="135" as="sourcePoint" />
+            <mxPoint x="520" y="135" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- loop B: polling de la app -->
+        <mxCell id="loopB" value="loop   [cada 10s, mientras sesionActiva]" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#666666;dashed=1;align=left;verticalAlign=top;fontStyle=1;fontSize=11;spacingLeft=6;spacingTop=2;" vertex="1" parent="1">
+          <mxGeometry x="480" y="165" width="530" height="330" as="geometry" />
+        </mxCell>
+
+        <mxCell id="msg2" value="fetchLatest()" style="html=1;endArrow=block;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="740" y="205" as="sourcePoint" />
+            <mxPoint x="960" y="205" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="msg3" value="GET /channels/.../feeds.json?results=30" style="html=1;endArrow=block;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="960" y="245" as="sourcePoint" />
+            <mxPoint x="520" y="245" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="msg4" value="200 OK (JSON feeds)" style="html=1;endArrow=open;dashed=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="520" y="285" as="sourcePoint" />
+            <mxPoint x="960" y="285" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="self5" value="reconstruye Vitales&#10;(ultimo valor no nulo por campo)" style="html=1;endArrow=block;edgeStyle=none;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="960" y="320" as="sourcePoint" />
+            <mxPoint x="960" y="345" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="1040" y="320" />
+              <mxPoint x="1040" y="345" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="msg6" value="Vitales" style="html=1;endArrow=open;dashed=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="960" y="390" as="sourcePoint" />
+            <mxPoint x="740" y="390" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="self7" value="calcula pHr, pSpo2, pTemp, pRr, pPa&#10;(News2Utils)" style="html=1;endArrow=block;edgeStyle=none;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="740" y="425" as="sourcePoint" />
+            <mxPoint x="740" y="450" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="820" y="425" />
+              <mxPoint x="820" y="450" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="self8" value="evalua esCritico" style="html=1;endArrow=block;edgeStyle=none;rounded=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="740" y="465" as="sourcePoint" />
+            <mxPoint x="740" y="485" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="820" y="465" />
+              <mxPoint x="820" y="485" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- alt: alerta critica vs actualizacion normal -->
+        <mxCell id="altFrame" value="alt   [esCritico]" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#666666;dashed=1;align=left;verticalAlign=top;fontStyle=1;fontSize=11;spacingLeft=6;spacingTop=2;" vertex="1" parent="1">
+          <mxGeometry x="20" y="510" width="1030" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="altDivider" style="html=1;endArrow=none;dashed=1;strokeColor=#666666;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="20" y="600" as="sourcePoint" />
+            <mxPoint x="1050" y="600" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="altElseLabel" value="[else]" style="text;html=1;align=left;verticalAlign=top;fontStyle=2;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="26" y="603" width="80" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="msgAlt1" value="muestra AlertDialog «¡ALERTA CRÍTICA!»" style="html=1;endArrow=block;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="740" y="555" as="sourcePoint" />
+            <mxPoint x="80" y="555" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="msgAlt2" value="actualiza Home / Detalle con datos nuevos" style="html=1;endArrow=block;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="740" y="645" as="sourcePoint" />
+            <mxPoint x="80" y="645" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

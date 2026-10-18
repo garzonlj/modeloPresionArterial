@@ -376,6 +376,7 @@ def trabajador_news2(estado, ir_buf, bp_clf, ts_pub, senml_f):
                 "news2_total": res["total"],
                 "news2_level": res["level_code"],
                 "node_id": NODE_ID_SHORT,
+                "timestamp": int(time.time()),
             }
             senml_f.write(senml_to_json(build_senml(lectura)) + "\n")
             senml_f.flush()

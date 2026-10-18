@@ -15,6 +15,7 @@ UNITS = {
     "news2_total": None,
     "news2_level": None,
     "node_id": None,
+    "timestamp": "s",
 }
 
 

@@ -1,0 +1,62 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Clases - App VIGIA" id="clases-app-vigia">
+    <mxGraphModel dx="1510" dy="639" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="vigiaApp" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=4;fillColor=#f8cecc;strokeColor=#b85450;" value="&lt;b&gt;VigiaApp&lt;/b&gt;&lt;br&gt;&lt;i&gt;«composable» raiz&lt;/i&gt;&lt;hr&gt;- pantalla: Pantalla&lt;br&gt;- datos: Vitales&lt;br&gt;- alertaCerrada: Boolean&lt;hr&gt;+ estaConectado(datos): Boolean&lt;br&gt;+ nodoMostrado(datos): String" vertex="1">
+          <mxGeometry height="150" width="260" x="380" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="pantalla" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=4;fillColor=#fff2cc;strokeColor=#d6b656;" value="&lt;b&gt;«enumeration»&lt;/b&gt;&lt;br&gt;&lt;b&gt;Pantalla&lt;/b&gt;&lt;hr&gt;LOGIN&lt;br&gt;REGISTRO&lt;br&gt;HOME&lt;br&gt;DETALLE&lt;br&gt;PERFIL" vertex="1">
+          <mxGeometry height="130" width="200" x="800" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="vitales" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=4;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="&lt;b&gt;Vitales&lt;/b&gt;&lt;br&gt;&lt;i&gt;(data class)&lt;/i&gt;&lt;hr&gt;+ hr: String?&lt;br&gt;+ hrMillis: Long?&lt;br&gt;+ spo2: String?&lt;br&gt;+ spo2Millis: Long?&lt;br&gt;+ temp: String?&lt;br&gt;+ tempMillis: Long?&lt;br&gt;+ rr: String?&lt;br&gt;+ rrMillis: Long?&lt;br&gt;+ paPuntos: String?&lt;br&gt;+ paMillis: Long?&lt;br&gt;+ news2Total: String?&lt;br&gt;+ news2Millis: Long?&lt;br&gt;+ nodoId: String?&lt;br&gt;+ piMillis: Long?" vertex="1">
+          <mxGeometry height="320" width="260" x="380" y="260" as="geometry" />
+        </mxCell>
+        <mxCell id="tsClient" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=4;fillColor=#d5e8d4;strokeColor=#82b366;" value="&lt;b&gt;ThingSpeakClient&lt;/b&gt;&lt;br&gt;&lt;i&gt;«object»&lt;/i&gt;&lt;hr&gt;- CHANNEL_ID: String&lt;br&gt;- READ_API_KEY: String&lt;hr&gt;+ fetchLatest(): Vitales&lt;br&gt;+ fetchHistorialAlertas(umbral, maximo): List&amp;lt;AlertaHistorial&amp;gt;&lt;br&gt;+ fetchHistorialNews2Total(maximo): List&amp;lt;AlertaHistorial&amp;gt;" vertex="1">
+          <mxGeometry height="170" width="280" x="40" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="alertaHist" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=4;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="&lt;b&gt;AlertaHistorial&lt;/b&gt;&lt;br&gt;&lt;i&gt;(data class)&lt;/i&gt;&lt;hr&gt;+ millis: Long&lt;br&gt;+ total: Int" vertex="1">
+          <mxGeometry height="100" width="220" x="70" y="530" as="geometry" />
+        </mxCell>
+        <mxCell id="news2Utils" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=4;fillColor=#d5e8d4;strokeColor=#82b366;" value="&lt;b&gt;News2Utils&lt;/b&gt;&lt;br&gt;&lt;i&gt;«funciones de News2.kt»&lt;/i&gt;&lt;hr&gt;(sin atributos)&lt;hr&gt;+ categoriaPuntos(puntos): Categoria&lt;br&gt;+ puntosHr(hr): Int?&lt;br&gt;+ puntosSpo2(spo2): Int?&lt;br&gt;+ puntosTemp(temp): Int?&lt;br&gt;+ puntosRr(rr): Int?&lt;br&gt;+ colorPorTotal(total): Long" vertex="1">
+          <mxGeometry height="190" width="280" x="740" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="categoria" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=4;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="&lt;b&gt;Categoria&lt;/b&gt;&lt;br&gt;&lt;i&gt;(data class)&lt;/i&gt;&lt;hr&gt;+ etiqueta: String&lt;br&gt;+ colorHex: Long" vertex="1">
+          <mxGeometry height="100" width="220" x="800" y="520" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" edge="1" parent="1" source="vigiaApp" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=open;endFill=0;" target="pantalla" value="navega">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" edge="1" parent="1" source="vigiaApp" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=open;endFill=0;" target="vitales" value="1">
+          <mxGeometry relative="1" x="0.7143" y="10" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e3" edge="1" parent="1" source="vigiaApp" style="edgeStyle=orthogonalEdgeStyle;html=1;dashed=1;endArrow=open;endFill=0;" target="tsClient" value="«consulta»">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;html=1;dashed=1;endArrow=open;endFill=0;entryX=-0.001;entryY=0.419;entryDx=0;entryDy=0;entryPerimeter=0;" target="news2Utils" value="«calcula puntos»">
+          <mxGeometry relative="1" x="-0.2888" y="-10" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="720" y="150" />
+              <mxPoint x="720" y="359.6" />
+            </Array>
+            <mxPoint x="640" y="150" as="sourcePoint" />
+            <mxPoint x="880" y="250" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e5" edge="1" parent="1" source="tsClient" style="edgeStyle=orthogonalEdgeStyle;html=1;dashed=1;endArrow=open;endFill=0;" target="vitales" value="«crea»">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" edge="1" parent="1" source="tsClient" style="edgeStyle=orthogonalEdgeStyle;html=1;dashed=1;endArrow=open;endFill=0;" target="alertaHist" value="«crea»">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e7" edge="1" parent="1" source="news2Utils" style="edgeStyle=orthogonalEdgeStyle;html=1;dashed=1;endArrow=open;endFill=0;" target="categoria" value="«crea»">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
