@@ -73,7 +73,7 @@
 \maketitle
 
 \begin{abstract}
-VIGIA (\textit{Vital Intelligent Guardian}) es una solución IoT de bajo costo para el monitoreo continuo de signos vitales y el cálculo automático de la escala NEWS-2 en pacientes con riesgo de sepsis. El nodo IoT, basado en una Raspberry Pi 3 con los sensores MAX30100 (fotopletismografía) y MLX90614 (temperatura infrarroja), obtiene en el borde la frecuencia cardíaca, la saturación de oxígeno, la frecuencia respiratoria, la temperatura y los puntos NEWS-2 de presión arterial sistólica, estos últimos mediante un clasificador \textit{Random Forest} entrenado con 119,880 ventanas de señal PPG del \textit{dataset} Kachuee/UCI. Las lecturas se empaquetan en SenML, se publican por MQTT sobre TLS en ThingSpeak y se presentan en una aplicación Android que genera una alerta crítica según los criterios de escalamiento de la escala. Los experimentos mostraron que la estimación de la presión sistólica en mmHg a partir de PPG sin calibración no cumple el estándar AAMI (desviación estándar del error de 16.68~mmHg), por lo que el problema se reformuló como la clasificación directa de los puntos NEWS-2, lo cual elevó la sensibilidad para detectar casos de riesgo de 22.3\% a 72.1\% y la de los casos de 3 puntos de 10.0\% a 70.0\%. El sistema funcionó de extremo a extremo; las pruebas evidenciaron que la temperatura, la SpO	extsubscript{2} y la frecuencia respiratoria requieren calibración antes de un uso clínico.
+VIGIA (\textit{Vital Intelligent Guardian}) es una solución IoT de bajo costo para el monitoreo continuo de signos vitales y el cálculo automático de la escala NEWS-2 en pacientes con riesgo de sepsis. El nodo IoT, basado en una Raspberry Pi 3 con los sensores MAX30100 (fotopletismografía) y MLX90614 (temperatura infrarroja), obtiene en el borde la frecuencia cardíaca, la saturación de oxígeno, la frecuencia respiratoria, la temperatura y los puntos NEWS-2 de presión arterial sistólica, estos últimos mediante un clasificador \textit{Random Forest} entrenado con 119,880 ventanas de señal PPG del \textit{dataset} Kachuee/UCI. Las lecturas se empaquetan en SenML, se publican por MQTT sobre TLS en ThingSpeak y se presentan en una aplicación Android que genera una alerta crítica según los criterios de escalamiento de la escala. Los experimentos mostraron que la estimación de la presión sistólica en mmHg a partir de PPG sin calibración no cumple el estándar AAMI (desviación estándar del error de 16.68~mmHg), por lo que el problema se reformuló como la clasificación directa de los puntos NEWS-2, lo cual elevó la sensibilidad para detectar casos de riesgo de 22.3\% a 72.1\% y la de los casos de 3 puntos de 10.0\% a 70.0\%. El sistema funcionó de extremo a extremo; las pruebas evidenciaron que la temperatura, la SpO\textsubscript{2} y la frecuencia respiratoria requieren calibración antes de un uso clínico.
 \end{abstract}
 
 \newpage
@@ -172,7 +172,7 @@ La solución implementada se organiza en una arquitectura IoT de cinco capas, en
 
     \item \textbf{Capa de red (transmisión).} La Raspberry Pi se conecta a internet por WiFi y publica las lecturas mediante el protocolo MQTT, bajo el patrón publicador/suscriptor, hacia el \textit{broker} de ThingSpeak. La conexión se realiza por el puerto 8883 con cifrado TLS y se autentica con credenciales de dispositivo MQTT. Cada variable se publica en su propio tópico (\textit{channels/<ID>/publish/fields/fieldN}), enviando un campo por mensaje en rotación y respetando un intervalo mínimo de 15 segundos entre mensajes, que es el límite de escritura de la plataforma.
 
-    \item \textbf{Capa de nube (almacenamiento).} ThingSpeak almacena las lecturas en un canal de ocho campos: frecuencia cardíaca, SpO	extsubscript{2}, temperatura, frecuencia respiratoria, puntos de presión arterial, puntaje NEWS-2 total, identificador del nodo y marca de tiempo de la lectura en la Raspberry Pi. Cada dato queda guardado con su hora de recepción, lo cual permite consultar el histórico y observar tendencias, y está disponible mediante una API REST.
+    \item \textbf{Capa de nube (almacenamiento).} ThingSpeak almacena las lecturas en un canal de ocho campos: frecuencia cardíaca, SpO\textsubscript{2}, temperatura, frecuencia respiratoria, puntos de presión arterial, puntaje NEWS-2 total, identificador del nodo y marca de tiempo de la lectura en la Raspberry Pi. Cada dato queda guardado con su hora de recepción, lo cual permite consultar el histórico y observar tendencias, y está disponible mediante una API REST.
 
     \item \textbf{Capa de aplicación.} La aplicación móvil Android, desarrollada en Kotlin con Jetpack Compose, consulta la API REST de ThingSpeak cada 10 segundos, presenta los signos vitales y el puntaje NEWS-2 al personal médico, muestra el histórico y genera la alerta crítica cuando corresponde. El inicio de sesión y el registro de usuarios se realizan con Firebase Authentication, que se usa únicamente para la gestión de cuentas; los datos del paciente no se almacenan en Firebase.
 \end{enumerate}
@@ -203,7 +203,7 @@ La capa de adquisición está conformada por el nodo IoT, encargado de leer los 
 
 \subsubsection{Sensores}
 
-La Tabla \ref{tab:sensores} resume los sensores del nodo, su dirección en el bus I2C, las variables que se obtienen de cada uno y la configuración utilizada. En el Anexo \ref{anexo:sensores} se amplían sus características y su conexión a la Raspberry Pi.
+La Tabla \ref{tab:sensores} resume los sensores del nodo, su dirección en el bus I2C, las variables que se obtienen de cada uno y la configuración utilizada.
 
 \begin{table}[H]
 \centering
@@ -212,7 +212,7 @@ La Tabla \ref{tab:sensores} resume los sensores del nodo, su dirección en el bu
 \toprule
 \textbf{Sensor} & \textbf{Dirección I2C} & \textbf{Variables} & \textbf{Configuración utilizada} \\
 \midrule
-MAX30100 & 0x57 & Señal PPG infrarroja y roja (BPM, SpO	extsubscript{2}, frecuencia respiratoria y presión arterial) & Modo SpO	extsubscript{2} (LED rojo e infrarrojo activos), 100 muestras/s, ancho de pulso de 1600~$\mu$s (ADC de 16 bits), misma corriente para ambos LED. \\
+MAX30100 & 0x57 & Señal PPG infrarroja y roja (BPM, SpO\textsubscript{2}, frecuencia respiratoria y presión arterial) & Modo SpO\textsubscript{2} (LED rojo e infrarrojo activos), 100 muestras/s, ancho de pulso de 1600~$\mu$s (ADC de 16 bits), misma corriente para ambos LED. \\
 MLX90614 & 0x5A & Temperatura corporal sin contacto & Lectura del registro de temperatura del objeto, resolución de 0.02~°C y offset de calibración fijo de +1.48~°C. \\
 \bottomrule
 \end{tabular}
@@ -228,7 +228,7 @@ El \textbf{MLX90614} es un termómetro infrarrojo que mide la temperatura de la 
 
 El código fue desarrollado en Python y se organiza en dos hilos de ejecución que comparten un estado protegido con un \textit{lock}. Esta separación responde a una restricción del MAX30100: como la FIFO solo almacena 160~ms de señal, ningún proceso pesado puede ejecutarse en el mismo ciclo en el que se lee el sensor. La Figura \ref{fig:flujo_rpi} presenta el diagrama de flujo del código.
 
-\paragraph{Hilo principal: lectura de sensores.} Al iniciar se configuran ambos sensores, se carga el modelo de presión arterial y se configura la conexión MQTT. Luego, cada 5~ms se consulta cuántas muestras nuevas tiene la FIFO, comparando los punteros de escritura y lectura del MAX30100, y se leen todas las disponibles. Cada muestra (IR y roja) pasa por el procesador de señal y la muestra IR se guarda además en un \textit{buffer} circular de 60 segundos (6,000 muestras) que utiliza el hilo NEWS-2. Una vez por segundo se lee la temperatura, se calculan BPM y SpO	extsubscript{2} y se actualiza el estado compartido.
+\paragraph{Hilo principal: lectura de sensores.} Al iniciar se configuran ambos sensores, se carga el modelo de presión arterial y se configura la conexión MQTT. Luego, cada 5~ms se consulta cuántas muestras nuevas tiene la FIFO, comparando los punteros de escritura y lectura del MAX30100, y se leen todas las disponibles. Cada muestra (IR y roja) pasa por el procesador de señal y la muestra IR se guarda además en un \textit{buffer} circular de 60 segundos (6,000 muestras) que utiliza el hilo NEWS-2. Una vez por segundo se lee la temperatura, se calculan BPM y SpO\textsubscript{2} y se actualiza el estado compartido.
 
 Para garantizar que la lectura no se detenga se implementaron tres mecanismos de recuperación de la FIFO: se vacía justo antes de empezar a leerla, ya que la carga del modelo puede tardar lo suficiente para desbordarla; se vacía de inmediato ante cualquier error de comunicación I2C; y un \textit{watchdog} la vacía si pasa más de 1 segundo sin recibir muestras nuevas, situación en la que el sensor queda bloqueado con ambos punteros iguales.
 
@@ -249,7 +249,7 @@ El resultado se limita al rango de 70 a 100\% y se suaviza con una EMA (85\% val
 
 \paragraph{Hilo NEWS-2: frecuencia respiratoria, presión arterial y puntaje.} Cada 10 segundos este hilo copia el estado compartido y el \textit{buffer} de 60 segundos de señal IR. La frecuencia respiratoria se obtiene aislando la modulación respiratoria de la señal PPG con un filtro pasa-banda Butterworth de 0.1 a 0.5~Hz (6 a 30 respiraciones por minuto) y contando los picos de la señal filtrada en la ventana; el valor solo se acepta si se encuentra dentro de ese rango y se dispone de al menos 20 segundos de señal. Los puntos de presión arterial se obtienen con el clasificador descrito en la capa de analítica, y con todos los parámetros se calcula el puntaje NEWS-2. Finalmente, la lectura se empaqueta en formato SenML, se guarda en un archivo local y se entrega al módulo de transmisión.
 
-Las lecturas que no son válidas (por ejemplo, BPM o SpO	extsubscript{2} iguales a cero cuando no hay dedo, o temperatura no disponible si el MLX90614 no responde) se reportan como vacías en lugar de enviarse como valores reales. Adicionalmente, el nodo guarda localmente un registro de cada lectura por segundo, lo cual permite revisar la sesión aunque falle la conexión.
+Las lecturas que no son válidas (por ejemplo, BPM o SpO\textsubscript{2} iguales a cero cuando no hay dedo, o temperatura no disponible si el MLX90614 no responde) se reportan como vacías en lugar de enviarse como valores reales. Adicionalmente, el nodo guarda localmente un registro de cada lectura por segundo, lo cual permite revisar la sesión aunque falle la conexión.
 
 \begin{figure}[H]
 \centering
@@ -265,7 +265,7 @@ Las lecturas que no son válidas (por ejemplo, BPM o SpO	extsubscript{2} iguales
 ]
 % ---------------- Hilo principal ----------------
 \node[term] (ini) {Hilo principal};
-\node[proc, below=of ini] (i2c) {Abrir bus I2C 1: MLX90614 (0x5A) y MAX30100 (0x57) \\ reset, modo SpO	extsubscript{2}, 100 muestras/s, corriente LED};
+\node[proc, below=of ini] (i2c) {Abrir bus I2C 1: MLX90614 (0x5A) y MAX30100 (0x57) \\ reset, modo SpO\textsubscript{2}, 100 muestras/s, corriente LED};
 \node[proc, below=of i2c] (carga) {Cargar clasificador PA, configurar MQTT, \\ abrir archivo SenML local};
 \node[proc, below=of carga] (lanza) {Lanzar hilo NEWS-2 y vaciar FIFO del MAX30100};
 \node[proc, below=of lanza] (n) {Muestras pendientes: \\ \textit{n = (wr\_ptr - rd\_ptr) mod 16}};
@@ -274,7 +274,7 @@ Las lecturas que no son válidas (por ejemplo, BPM o SpO	extsubscript{2} iguales
 \node[dec, below=of lee] (d2) {¿Error I2C o > 1 s sin muestras?};
 \node[proc, text width=2.3cm, left=0.6cm of d2] (flush) {Vaciar FIFO \\ (watchdog)};
 \node[dec, below=of d2] (d3) {¿Pasó 1 s desde el último reporte?};
-\node[proc, below=of d3] (rep) {Leer temperatura (MLX90614) \\ Calcular BPM y SpO	extsubscript{2} \\ Actualizar estado compartido (lock) \\ Mostrar y registrar lectura};
+\node[proc, below=of d3] (rep) {Leer temperatura (MLX90614) \\ Calcular BPM y SpO\textsubscript{2} \\ Actualizar estado compartido (lock) \\ Mostrar y registrar lectura};
 \node[proc, below=of rep] (esp) {Esperar 5 ms};
 
 \draw[arr] (ini) -- (i2c);
@@ -296,7 +296,7 @@ Las lecturas que no son válidas (por ejemplo, BPM o SpO	extsubscript{2} iguales
 % ---------------- Hilo NEWS-2 ----------------
 \node[term] (h0) at (9.2,0) {Hilo NEWS-2};
 \node[hilo, below=of h0] (h1) {Esperar 10 s};
-\node[hilo, below=of h1] (h2) {Copiar estado compartido (BPM, SpO	extsubscript{2}, temperatura) y \textit{buffer} IR de 60 s};
+\node[hilo, below=of h1] (h2) {Copiar estado compartido (BPM, SpO\textsubscript{2}, temperatura) y \textit{buffer} IR de 60 s};
 \node[hilo, below=of h2] (h3) {Frecuencia respiratoria: pasa-banda 0.1--0.5 Hz y conteo de picos (6--30 rpm)};
 \node[hilo, below=of h3] (h4) {Puntos NEWS-2 de presión arterial con el clasificador Random Forest};
 \node[hilo, below=of h4] (h5) {Puntos por parámetro, puntaje NEWS-2 total y nivel de riesgo};
@@ -364,7 +364,7 @@ Se utiliza un tópico por variable, con el formato que define ThingSpeak, y el c
 \textbf{Tópico MQTT} & \textbf{Variable (SenML)} & \textbf{Descripción} \\
 \midrule
 \textit{channels/<ID>/publish/fields/field1} & \textit{max30100:hr} & Frecuencia cardíaca (lpm) \\
-\textit{channels/<ID>/publish/fields/field2} & \textit{max30100:spo2} & SpO	extsubscript{2} (\%) \\
+\textit{channels/<ID>/publish/fields/field2} & \textit{max30100:spo2} & SpO\textsubscript{2} (\%) \\
 \textit{channels/<ID>/publish/fields/field3} & \textit{mlx90614:temp} & Temperatura corporal (°C) \\
 \textit{channels/<ID>/publish/fields/field4} & \textit{resp\_rate} & Frecuencia respiratoria (rpm) \\
 \textit{channels/<ID>/publish/fields/field5} & \textit{sbp\_news2\_points} & Puntos NEWS-2 de presión arterial \\
@@ -551,7 +551,7 @@ En la Raspberry Pi el modelo solo se carga y se utiliza para realizar prediccion
 
 \subsubsection{Cálculo del puntaje NEWS-2}
 
-Con los puntos de presión obtenidos por el clasificador y los puntos de frecuencia cardíaca, SpO	extsubscript{2}, temperatura y frecuencia respiratoria, calculados con los rangos de la escala NEWS-2 \cite{ref26}, se obtiene el puntaje total como la suma de los puntos de cada parámetro. El nivel de riesgo se asigna de la siguiente manera:
+Con los puntos de presión obtenidos por el clasificador y los puntos de frecuencia cardíaca, SpO\textsubscript{2}, temperatura y frecuencia respiratoria, calculados con los rangos de la escala NEWS-2 \cite{ref26}, se obtiene el puntaje total como la suma de los puntos de cada parámetro. El nivel de riesgo se asigna de la siguiente manera:
 
 \begin{itemize}
     \item \textbf{Riesgo alto:} puntaje total mayor o igual a 7, respuesta de emergencia.
@@ -638,7 +638,18 @@ sin hacer
 
 \subsection{Pruebas de funcionamiento}
 
-sin hacer 
+% PENDIENTE: completar la descripción de las pruebas (montaje, adquisición, transmisión y lecturas obtenidas).
+
+\paragraph{Alerta crítica.} La Figura \ref{fig:alerta} muestra la alerta generada por la aplicación durante una de las pruebas. El nodo pi3-001 alcanzó un puntaje NEWS-2 de 8, y la aplicación indicó como causas los tres parámetros que llegaron a 3 puntos: la saturación de oxígeno (89\%), la frecuencia respiratoria (6~rpm) y la presión arterial sistólica en riesgo alto. Al fondo se observa que la pantalla principal también clasificó al paciente como \textit{Crítico}, tanto en el estado actual como en la tarjeta del nodo, y la gráfica del histórico NEWS-2 con la evolución del puntaje durante la sesión. La alerta se superpone a la pantalla en la que se encuentre el usuario y solo se cierra al presionar ACEPTAR, tal como se describió en el diagrama de estados (Figura \ref{fig:estados}).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.35\linewidth]{captura_alerta.png}
+    \caption{Alerta crítica generada por la aplicación durante las pruebas.}
+    \label{fig:alerta}
+\end{figure}
+
+Las pruebas se realizaron sobre personas sanas, por lo que los valores que activaron la alerta no corresponden a un deterioro real. La SpO\textsubscript{2} de 89\% y la frecuencia respiratoria de 6~rpm reflejan la falta de calibración de estas mediciones y su sensibilidad al movimiento y al contacto del dedo con el sensor, y los 3 puntos de presión arterial son coherentes con la tasa de falsos casos de 3 puntos del clasificador (6.1\%) y con la diferencia entre la señal del MAX30100 y las señales de monitores clínicos con las que fue entrenado. Esto muestra que la lógica de alerta funciona correctamente, pero que su confiabilidad depende de la calidad de la medición de cada sensor.
 
 \subsection{Interfaz web}
 
@@ -770,7 +781,7 @@ El aspecto más relevante del trabajo es la reformulación del problema de presi
 
 Desde el punto de vista de la arquitectura, el procesamiento en el borde permitió que toda la analítica, incluido el modelo, se ejecute en la Raspberry Pi 3 y que la nube solo almacene y distribuya los resultados. La separación en dos hilos fue necesaria para no perder muestras del sensor, y el uso de SenML, MQTT sobre TLS y la reconstrucción de los campos en la aplicación permitieron trabajar dentro de los límites de la versión gratuita de ThingSpeak.
 
-Las principales limitaciones identificadas son: las métricas del modelo se obtuvieron con una separación por registro y no por paciente, ya que el \textit{dataset} no incluye el identificador de paciente; el modelo fue entrenado con señales de monitores clínicos y se aplica sobre un sensor de bajo costo, por lo que su desempeño en operación puede diferir del obtenido en prueba; y las lecturas de temperatura, SpO	extsubscript{2} y frecuencia respiratoria requieren calibración, ya que en las pruebas generaron alertas sin un deterioro real. Por estas razones, VIGIA se presenta como una herramienta de alerta temprana de tendencia que apoya la vigilancia del personal médico, y no como un instrumento de medición clínica.
+Las principales limitaciones identificadas son: las métricas del modelo se obtuvieron con una separación por registro y no por paciente, ya que el \textit{dataset} no incluye el identificador de paciente; el modelo fue entrenado con señales de monitores clínicos y se aplica sobre un sensor de bajo costo, por lo que su desempeño en operación puede diferir del obtenido en prueba; y las lecturas de temperatura, SpO\textsubscript{2} y frecuencia respiratoria requieren calibración, ya que en las pruebas generaron alertas sin un deterioro real. Por estas razones, VIGIA se presenta como una herramienta de alerta temprana de tendencia que apoya la vigilancia del personal médico, y no como un instrumento de medición clínica.
 
 % ------------------------------------------------------------
 \section{Conclusiones}\label{sec:conclusiones}
@@ -788,7 +799,7 @@ Las principales limitaciones identificadas son: las métricas del modelo se obtu
 
     \item La versión gratuita de ThingSpeak limita la escritura a un mensaje cada 15 segundos, lo cual hace que cada variable se actualice cada 160 segundos aproximadamente. Esta latencia es adecuada para el seguimiento de tendencias que propone NEWS-2, pero no para un monitoreo continuo en tiempo real.
 
-    \item La confiabilidad de la alerta depende de la calidad de cada medición. Las lecturas de temperatura, SpO	extsubscript{2} y frecuencia respiratoria generaron alertas sin un deterioro real, por lo que su calibración contra instrumentos de referencia es el paso necesario antes de cualquier uso clínico. Como trabajo futuro se proponen además validar el clasificador con datos adquiridos con el propio MAX30100, separar los datos por paciente en la evaluación, notificar las alertas aunque la aplicación esté cerrada y migrar a una plataforma sin el límite de escritura de ThingSpeak.
+    \item La confiabilidad de la alerta depende de la calidad de cada medición. Las lecturas de temperatura, SpO\textsubscript{2} y frecuencia respiratoria generaron alertas sin un deterioro real, por lo que su calibración contra instrumentos de referencia es el paso necesario antes de cualquier uso clínico. Como trabajo futuro se proponen además validar el clasificador con datos adquiridos con el propio MAX30100, separar los datos por paciente en la evaluación, notificar las alertas aunque la aplicación esté cerrada y migrar a una plataforma sin el límite de escritura de ThingSpeak.
 \end{itemize}
 
 

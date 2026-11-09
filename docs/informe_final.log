@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.9.1)  9 NOV 2026 15:48
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.9.1)  9 NOV 2026 17:31
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -770,12 +770,12 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
 [5]
-<vision_general.png, id=267, 2922.92pt x 1644.1425pt>
+<vision_general.png, id=268, 2922.92pt x 1644.1425pt>
 File: vision_general.png Graphic file (type png)
 <use vision_general.png>
 Package pdftex.def Info: vision_general.png  used on input line 154.
 (pdftex.def)             Requested size: 386.96027pt x 217.65968pt.
-<arquitectura.png, id=270, 2659.9375pt x 1043.9pt>
+<arquitectura.png, id=271, 2659.9375pt x 1043.9pt>
 File: arquitectura.png Graphic file (type png)
 <use arquitectura.png>
 Package pdftex.def Info: arquitectura.png  used on input line 163.
@@ -794,7 +794,9 @@ Underfull \hbox (badness 4531) in paragraph at lines 191--192
  []
 
 
-LaTeX Warning: Reference `anexo:sensores' on page 7 undefined on input line 206.
+Overfull \hbox (2.04019pt too wide) in paragraph at lines 213--213
+[]|\T1/cmr/bx/n/10 Dirección 
+ []
 
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -804,10 +806,6 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
 [7]
-Overfull \hbox (2.04019pt too wide) in paragraph at lines 213--213
-[]|\T1/cmr/bx/n/10 Dirección 
- []
-
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 13.59999pt, for example:
@@ -832,7 +830,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
 [10]
-<thingspeak_campos.png, id=320, 2549.525pt x 1069.9975pt>
+<thingspeak_campos.png, id=322, 2549.525pt x 1069.9975pt>
 File: thingspeak_campos.png Graphic file (type png)
 <use thingspeak_campos.png>
 Package pdftex.def Info: thingspeak_campos.png  used on input line 384.
@@ -854,7 +852,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
 [12 <./thingspeak_campos.png (PNG copy)>]
-<pipeline_ppg.png, id=339, 2649.9pt x 913.4125pt>
+<pipeline_ppg.png, id=341, 2649.9pt x 913.4125pt>
 File: pipeline_ppg.png Graphic file (type png)
 <use pipeline_ppg.png>
 Package pdftex.def Info: pipeline_ppg.png  used on input line 411.
@@ -868,7 +866,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
 [13 <./pipeline_ppg.png (PNG copy)>]
-<modelo_rf.png, id=358, 2680.0125pt x 1154.3125pt>
+<modelo_rf.png, id=360, 2680.0125pt x 1154.3125pt>
 File: modelo_rf.png Graphic file (type png)
 <use modelo_rf.png>
 Package pdftex.def Info: modelo_rf.png  used on input line 480.
@@ -898,7 +896,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
 [16]
-<app_pantallas_1.png, id=390, 2127.95pt x 1138.2525pt>
+<app_pantallas_1.png, id=392, 2127.95pt x 1138.2525pt>
 File: app_pantallas_1.png Graphic file (type png)
 <use app_pantallas_1.png>
 Package pdftex.def Info: app_pantallas_1.png  used on input line 578.
@@ -912,12 +910,12 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
 [17]
-<app_pantallas_2.png, id=397, 1345.025pt x 1138.2525pt>
+<app_pantallas_2.png, id=399, 1345.025pt x 1138.2525pt>
 File: app_pantallas_2.png Graphic file (type png)
 <use app_pantallas_2.png>
 Package pdftex.def Info: app_pantallas_2.png  used on input line 585.
 (pdftex.def)             Requested size: 250.38564pt x 211.8934pt.
-<caso_uso.png, id=399, 2127.95pt x 1393.205pt>
+<caso_uso.png, id=401, 2127.95pt x 1393.205pt>
 File: caso_uso.png Graphic file (type png)
 <use caso_uso.png>
 Package pdftex.def Info: caso_uso.png  used on input line 598.
@@ -931,7 +929,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
 [18 <./app_pantallas_1.png (PNG copy)> <./app_pantallas_2.png (PNG copy)>]
-<clases.png, id=406, 2117.9125pt x 1212.53pt>
+<clases.png, id=408, 2117.9125pt x 1212.53pt>
 File: clases.png Graphic file (type png)
 <use clases.png>
 Package pdftex.def Info: clases.png  used on input line 607.
@@ -945,12 +943,12 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
 [19 <./caso_uso.png (PNG copy)> <./clases.png (PNG copy)>]
-<estados.png, id=415, 2358.8125pt x 1017.8025pt>
+<estados.png, id=417, 2358.8125pt x 1017.8025pt>
 File: estados.png Graphic file (type png)
 <use estados.png>
 Package pdftex.def Info: estados.png  used on input line 616.
 (pdftex.def)             Requested size: 386.96027pt x 166.96729pt.
-<secuencia.png, id=417, 2131.965pt x 1216.545pt>
+<secuencia.png, id=419, 2131.965pt x 1216.545pt>
 File: secuencia.png Graphic file (type png)
 <use secuencia.png>
 Package pdftex.def Info: secuencia.png  used on input line 625.
@@ -964,11 +962,11 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
 [20 <./estados.png (PNG copy)>]
-<web_inicio.png, id=426, 2348.775pt x 1284.8pt>
-File: web_inicio.png Graphic file (type png)
-<use web_inicio.png>
-Package pdftex.def Info: web_inicio.png  used on input line 649.
-(pdftex.def)             Requested size: 386.96027pt x 211.66917pt.
+<captura_alerta.png, id=427, 215.6055pt x 491.436pt>
+File: captura_alerta.png Graphic file (type png)
+<use captura_alerta.png>
+Package pdftex.def Info: captura_alerta.png  used on input line 647.
+(pdftex.def)             Requested size: 159.33821pt x 363.19952pt.
 
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -978,15 +976,29 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
 [21 <./secuencia.png (PNG copy)>]
-<web_laptop.png, id=434, 1967.35pt x 1039.885pt>
+<web_inicio.png, id=437, 2348.775pt x 1284.8pt>
+File: web_inicio.png Graphic file (type png)
+<use web_inicio.png>
+Package pdftex.def Info: web_inicio.png  used on input line 660.
+(pdftex.def)             Requested size: 386.96027pt x 211.66917pt.
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 13.59999pt, for example:
+(fancyhdr)                \setlength{\headheight}{13.59999pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+
+[22 <./captura_alerta.png>]
+<web_laptop.png, id=446, 1967.35pt x 1039.885pt>
 File: web_laptop.png Graphic file (type png)
 <use web_laptop.png>
-Package pdftex.def Info: web_laptop.png  used on input line 656.
+Package pdftex.def Info: web_laptop.png  used on input line 667.
 (pdftex.def)             Requested size: 318.66948pt x 168.43188pt.
-<res_distribucion_clases.png, id=436, 390.9807pt x 237.40695pt>
+<res_distribucion_clases.png, id=448, 390.9807pt x 237.40695pt>
 File: res_distribucion_clases.png Graphic file (type png)
 <use res_distribucion_clases.png>
-Package pdftex.def Info: res_distribucion_clases.png  used on input line 669.
+Package pdftex.def Info: res_distribucion_clases.png  used on input line 680.
 (pdftex.def)             Requested size: 318.66948pt x 193.50125pt.
 
 
@@ -996,11 +1008,11 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
-[22 <./web_inicio.png (PNG copy)> <./web_laptop.png (PNG copy)>]
-<res_curva_aprendizaje.png, id=448, 394.23285pt x 237.40695pt>
+[23 <./web_inicio.png (PNG copy)> <./web_laptop.png (PNG copy)>]
+<res_curva_aprendizaje.png, id=459, 394.23285pt x 237.40695pt>
 File: res_curva_aprendizaje.png Graphic file (type png)
 <use res_curva_aprendizaje.png>
-Package pdftex.def Info: res_curva_aprendizaje.png  used on input line 698.
+Package pdftex.def Info: res_curva_aprendizaje.png  used on input line 709.
 (pdftex.def)             Requested size: 318.66948pt x 191.90733pt.
 
 
@@ -1010,11 +1022,11 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
-[23 <./res_distribucion_clases.png>]
-<res_regresion_vs_clasificador.png, id=462, 390.9807pt x 237.40695pt>
+[24 <./res_distribucion_clases.png>]
+<res_regresion_vs_clasificador.png, id=473, 390.9807pt x 237.40695pt>
 File: res_regresion_vs_clasificador.png Graphic file (type png)
 <use res_regresion_vs_clasificador.png>
-Package pdftex.def Info: res_regresion_vs_clasificador.png  used on input line 729.
+Package pdftex.def Info: res_regresion_vs_clasificador.png  used on input line 740.
 (pdftex.def)             Requested size: 318.66948pt x 193.50125pt.
 
 
@@ -1024,16 +1036,16 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
-[24 <./res_curva_aprendizaje.png>]
-<res_matriz_confusion.png, id=473, 345.4506pt x 298.4751pt>
+[25 <./res_curva_aprendizaje.png>]
+<res_matriz_confusion.png, id=485, 345.4506pt x 298.4751pt>
 File: res_matriz_confusion.png Graphic file (type png)
 <use res_matriz_confusion.png>
-Package pdftex.def Info: res_matriz_confusion.png  used on input line 738.
+Package pdftex.def Info: res_matriz_confusion.png  used on input line 749.
 (pdftex.def)             Requested size: 273.14923pt x 236.01135pt.
-<res_umbral.png, id=476, 390.9807pt x 259.4493pt>
+<res_umbral.png, id=488, 390.9807pt x 259.4493pt>
 File: res_umbral.png Graphic file (type png)
 <use res_umbral.png>
-Package pdftex.def Info: res_umbral.png  used on input line 747.
+Package pdftex.def Info: res_umbral.png  used on input line 758.
 (pdftex.def)             Requested size: 318.66948pt x 211.4671pt.
 
 
@@ -1043,7 +1055,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
-[25 <./res_regresion_vs_clasificador.png> <./res_matriz_confusion.png>]
+[26 <./res_regresion_vs_clasificador.png> <./res_matriz_confusion.png>]
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 13.59999pt, for example:
@@ -1051,15 +1063,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
-[26 <./res_umbral.png>]
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
-
-[27]
+[27 <./res_umbral.png>]
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 13.59999pt, for example:
@@ -1075,7 +1079,15 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
-[29] (informe_final.aux
+[29]
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 13.59999pt, for example:
+(fancyhdr)                \setlength{\headheight}{13.59999pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+
+[30] (informe_final.aux
 LaTeX Info: Redefining \. on input line 11.
 LaTeX Info: Redefining \% on input line 11.
 )
@@ -1083,25 +1095,21 @@ LaTeX Info: Redefining \% on input line 11.
 LaTeX2e <2025-11-01>
 L3 programming layer <2025-12-24>
  ***********
-
-
-LaTeX Warning: There were undefined references.
-
 Package rerunfilecheck Info: File `informe_final.out' has not changed.
 (rerunfilecheck)             Checksum: 0CBB68F7398D019041DC51C5D218017A;10028.
  ) 
 Here is how much of TeX's memory you used:
- 27152 strings out of 467871
- 497900 string characters out of 5428444
- 923308 words of memory out of 5000000
- 55444 multiletter control sequences out of 15000+600000
- 654541 words of font info for 103 fonts, out of 8000000 for 9000
+ 27164 strings out of 467871
+ 498129 string characters out of 5428444
+ 923404 words of memory out of 5000000
+ 55453 multiletter control sequences out of 15000+600000
+ 655309 words of font info for 104 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 84i,12n,94p,1554b,836s stack positions out of 10000i,1000n,20000p,200000b,200000s
- <C:\Users\jlaur\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ectt1095.pk> <C:\Users\jlaur\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tcrm0900.pk> <C:\Users\jlaur\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm0900.pk> <C:\Users\jlaur\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecti0900.pk> <C:\Users\jlaur\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx0900.pk> <C:\Users\jlaur\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbi1000.pk> <C:\Users\jlaur\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecti0800.pk> <C:\Users\jlaur\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm0800.pk> <C:\Users\jlaur\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx0800.pk> <C:\Users\jlaur\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tcrm1000.pk> <C:\Users\jlaur\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbi1200.pk> <C:\Users\jlaur\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx1200.pk> <C:\Users\jlaur\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecti1095.pk> <C:\Users\jlaur\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx1095.pk> <C:\Users\jlaur\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx1440.pk> <C:\Users\jlaur\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm1095.pk> <C:\Users\jlaur\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecti1000.pk> <C:\Users\jlaur\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm1000.pk> <C:\Users\jlaur\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx1000.pk> <C:\Users\jlaur\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecti1200.pk> <C:\Users\jlaur\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm1200.pk> <C:\Users\jlaur\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx1728.pk><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy8.pfb>
-Output written on informe_final.pdf (29 pages, 12812835 bytes).
+ 84i,14n,94p,1555b,836s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ <C:\Users\jlaur\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ectt1095.pk> <C:\Users\jlaur\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tcrm0900.pk> <C:\Users\jlaur\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm0900.pk> <C:\Users\jlaur\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecti0900.pk> <C:\Users\jlaur\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx0900.pk> <C:\Users\jlaur\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbi1000.pk> <C:\Users\jlaur\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecti0800.pk> <C:\Users\jlaur\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm0600.pk> <C:\Users\jlaur\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx0800.pk> <C:\Users\jlaur\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tcrm1000.pk> <C:\Users\jlaur\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm0800.pk> <C:\Users\jlaur\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbi1200.pk> <C:\Users\jlaur\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx1200.pk> <C:\Users\jlaur\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecti1095.pk> <C:\Users\jlaur\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx1095.pk> <C:\Users\jlaur\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx1440.pk> <C:\Users\jlaur\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm1095.pk> <C:\Users\jlaur\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm0700.pk> <C:\Users\jlaur\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecti1000.pk> <C:\Users\jlaur\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm1000.pk> <C:\Users\jlaur\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx1000.pk> <C:\Users\jlaur\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecti1200.pk> <C:\Users\jlaur\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm1200.pk> <C:\Users\jlaur\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx1728.pk><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy8.pfb>
+Output written on informe_final.pdf (30 pages, 12841770 bytes).
 PDF statistics:
- 1449 PDF objects out of 1728 (max. 8388607)
- 140 named destinations out of 1000 (max. 500000)
- 404 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1467 PDF objects out of 1728 (max. 8388607)
+ 142 named destinations out of 1000 (max. 500000)
+ 409 words of extra memory for PDF output out of 10000 (max. 10000000)
 
