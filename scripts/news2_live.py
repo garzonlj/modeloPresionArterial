@@ -115,12 +115,15 @@ def aggregate_news2(points):
     total = sum(available.values())
     any_three = any(v == 3 for v in available.values())
 
-    if any_three:
-        level, code = "EVIDENTE (un parametro en 3 puntos): respuesta urgente", 4
-    elif total >= 7:
-        level, code = "ALTO: respuesta inmediata", 3
+    # Orden segun NEWS-2 (RCP 2017): el total >= 7 (riesgo alto) y 5-6
+    # (riesgo medio) prevalecen sobre un parametro individual en 3 puntos
+    # (riesgo bajo-medio, que igualmente exige respuesta urgente).
+    if total >= 7:
+        level, code = "ALTO: respuesta de emergencia", 3
     elif total >= 5:
         level, code = "MEDIO: respuesta urgente", 2
+    elif any_three:
+        level, code = "BAJO-MEDIO (un parametro en 3 puntos): respuesta urgente", 4
     elif total >= 1:
         level, code = "BAJO: vigilar", 1
     else:

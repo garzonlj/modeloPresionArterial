@@ -1,0 +1,47 @@
+\babel@toc {spanish}{}\relax 
+\contentsline {section}{\numberline {1}Introducción}{3}{section.1}%
+\contentsline {section}{\numberline {2}Trabajos relacionados}{3}{section.2}%
+\contentsline {subsection}{\numberline {2.1}\textit {i-CardiAx: Wearable IoT-Driven System for Early Sepsis Detection Through Long-Term Vital Sign Monitoring}}{3}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}\textit {Wearable Sepsis Early Warning Using Cloud Computing and Logistic Regression Predictive Analytics}}{4}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}\textit {Interpretable Machine Learning-Based Real-Time Sepsis Diagnosis}}{4}{subsection.2.3}%
+\contentsline {subsection}{\numberline {2.4}\textit {Cross-Modal Contrastive Learning for Predicting Sepsis Onset in Medical Internet of Things (MIoT)}}{4}{subsection.2.4}%
+\contentsline {subsection}{\numberline {2.5}\textit {Sepsis Mortality Prediction Using Wearable Monitoring in Low--Middle Income Countries}}{4}{subsection.2.5}%
+\contentsline {section}{\numberline {3}Descripción del área de aplicación y problema}{5}{section.3}%
+\contentsline {section}{\numberline {4}Descripción de la solución}{6}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Arquitectura de la solución por capas}{6}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Descripción de la capa de adquisición de datos}{7}{subsection.4.2}%
+\contentsline {subsubsection}{\numberline {4.2.1}Sensores}{8}{subsubsection.4.2.1}%
+\contentsline {subsubsection}{\numberline {4.2.2}Código implementado en la Raspberry Pi}{8}{subsubsection.4.2.2}%
+\contentsline {paragraph}{Hilo principal: lectura de sensores.}{8}{subsubsection.4.2.2}%
+\contentsline {paragraph}{Separación de componentes y detección de latidos.}{9}{subsubsection.4.2.2}%
+\contentsline {paragraph}{Frecuencia cardíaca.}{9}{equation.1}%
+\contentsline {paragraph}{Saturación de oxígeno.}{9}{equation.1}%
+\contentsline {paragraph}{Hilo NEWS-2: frecuencia respiratoria, presión arterial y puntaje.}{9}{equation.2}%
+\contentsline {subsection}{\numberline {4.3}Descripción de la transmisión de datos}{10}{subsection.4.3}%
+\contentsline {subsubsection}{\numberline {4.3.1}Formato de los datos: SenML}{10}{subsubsection.4.3.1}%
+\contentsline {subsubsection}{\numberline {4.3.2}Nodo IoT hacia la nube: MQTT}{11}{subsubsection.4.3.2}%
+\contentsline {subsubsection}{\numberline {4.3.3}Nube hacia la aplicación: API REST}{12}{subsubsection.4.3.3}%
+\contentsline {subsection}{\numberline {4.4}Descripción de la capa de aplicación y analítica de datos}{12}{subsection.4.4}%
+\contentsline {subsubsection}{\numberline {4.4.1}Conjunto de datos de entrenamiento}{12}{subsubsection.4.4.1}%
+\contentsline {subsubsection}{\numberline {4.4.2}Extracción de características morfológicas}{13}{subsubsection.4.4.2}%
+\contentsline {subsubsection}{\numberline {4.4.3}De la estimación en mmHg a la clasificación del riesgo NEWS-2}{14}{subsubsection.4.4.3}%
+\contentsline {subsubsection}{\numberline {4.4.4}Clasificador de riesgo de presión arterial}{14}{subsubsection.4.4.4}%
+\contentsline {subsubsection}{\numberline {4.4.5}Inferencia en tiempo real en la Raspberry Pi}{16}{subsubsection.4.4.5}%
+\contentsline {subsubsection}{\numberline {4.4.6}Cálculo del puntaje NEWS-2}{16}{subsubsection.4.4.6}%
+\contentsline {subsubsection}{\numberline {4.4.7}Presentación de los resultados en la aplicación}{17}{subsubsection.4.4.7}%
+\contentsline {subsubsection}{\numberline {4.4.8}Interfaz de la aplicación móvil}{17}{subsubsection.4.4.8}%
+\contentsline {subsubsection}{\numberline {4.4.9}Diseño de la aplicación móvil}{18}{subsubsection.4.4.9}%
+\contentsline {paragraph}{Diagrama de casos de uso.}{18}{subsubsection.4.4.9}%
+\contentsline {paragraph}{Diagrama de clases.}{19}{figure.caption.16}%
+\contentsline {paragraph}{Diagrama de estados.}{19}{figure.caption.17}%
+\contentsline {paragraph}{Diagrama de secuencia.}{20}{figure.caption.18}%
+\contentsline {section}{\numberline {5}Resultados obtenidos}{21}{section.5}%
+\contentsline {subsection}{\numberline {5.1}Prototipo del nodo IoT}{21}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}Pruebas de funcionamiento}{21}{subsection.5.2}%
+\contentsline {subsection}{\numberline {5.3}Interfaz web}{21}{subsection.5.3}%
+\contentsline {subsection}{\numberline {5.4}Resultados de la analítica de datos}{22}{subsection.5.4}%
+\contentsline {subsubsection}{\numberline {5.4.1}Distribución de los datos}{22}{subsubsection.5.4.1}%
+\contentsline {subsubsection}{\numberline {5.4.2}Estimación de presión en mmHg}{23}{subsubsection.5.4.2}%
+\contentsline {subsubsection}{\numberline {5.4.3}Clasificador de riesgo NEWS-2}{24}{subsubsection.5.4.3}%
+\contentsline {subsection}{\numberline {5.5}Discusión}{26}{subsection.5.5}%
+\contentsline {section}{\numberline {6}Conclusiones}{27}{section.6}%
