@@ -791,6 +791,8 @@ Las principales limitaciones identificadas son: las métricas del modelo se obtu
 
     \item A partir de una única señal PPG fue posible obtener cuatro de los parámetros de la escala: frecuencia cardíaca, saturación de oxígeno, frecuencia respiratoria y nivel de riesgo de la presión arterial sistólica. Esto reduce el \textit{hardware} necesario a dos sensores de bajo costo, en lugar de un monitor de cabecera.
 
+    \item A diferencia de las soluciones revisadas en los trabajos relacionados, VIGIA se basa en la escala NEWS-2, una herramienta que el personal de salud ya conoce y usa en los hospitales. Esto facilita que el personal entienda e interprete las alertas sin necesidad de aprender un sistema nuevo. Otras propuestas, como i-CardiAx \cite{ref17}, usan sensores colocados en el pecho y otra escala de valoración; otras procesan los datos en la nube \cite{ref18} o recurren a modelos de aprendizaje profundo más complejos \cite{ref20}. VIGIA, en cambio, obtiene cuatro de los signos vitales de la escala a partir de un solo sensor que se pone en el dedo, incluido el nivel de riesgo de la presión arterial, sin usar el brazalete de un tensiómetro. Además, todos los cálculos se hacen en el mismo dispositivo junto al paciente, lo que lo hace una opción de bajo costo pensada para lugares donde no hay monitores de cabecera para todos los pacientes.
+
     \item Los experimentos demostraron que estimar la presión sistólica en mmHg con PPG de un solo sensor y sin calibración no cumple el estándar AAMI (desviación estándar del error de 16.68~mmHg frente al límite de 8~mmHg), y que esta limitación se debe a un sesgo propio de cada paciente y no a la capacidad del modelo ni a la cantidad de datos. Una calibración por paciente reduciría el error hasta casi cumplir el estándar, pero requiere un tensiómetro.
 
     \item Reformular el problema como la clasificación directa de los puntos NEWS-2 de presión, con pesos balanceados por clase y un umbral de decisión de 0.20 para la clase de 3 puntos, elevó la sensibilidad para detectar casos de riesgo de 22.3\% a 72.1\% y la de los casos de 3 puntos de 10.0\% a 70.0\%, con una tasa de falsos casos de 3 puntos de 6.1\%. Ajustar la salida del modelo a la decisión clínica que debe apoyar resultó más útil que buscar un valor numérico poco confiable.
@@ -802,6 +804,19 @@ Las principales limitaciones identificadas son: las métricas del modelo se obtu
     \item La confiabilidad de la alerta depende de la calidad de cada medición. Las lecturas de temperatura, SpO\textsubscript{2} y frecuencia respiratoria generaron alertas sin un deterioro real, por lo que su calibración contra instrumentos de referencia es el paso necesario antes de cualquier uso clínico. Como trabajo futuro se proponen además validar el clasificador con datos adquiridos con el propio MAX30100, separar los datos por paciente en la evaluación, notificar las alertas aunque la aplicación esté cerrada y migrar a una plataforma sin el límite de escritura de ThingSpeak.
 \end{itemize}
 
+
+
+\section{Mejoras futuras}\label{sec:mejoras}
+
+Aunque VIGIA funciona de principio a fin, hay aspectos que se pueden mejorar en el futuro, para la mejora de un muy buen producto:
+
+\begin{enumerate}[label=\arabic*)]
+    \item \textbf{Evaluar el sistema de alertas al personal médico.} El primer paso será comprobar en la práctica si las notificaciones llegan a tiempo y si el personal las nota de verdad, sobre todo cuando el celular está guardado o la aplicación está cerrada. Si se concluye que las notificaciones no son suficientes, se puede agregar un \textit{buzzer} (una pequeña alarma sonora) en el propio dispositivo. Así, la alerta también se escucharía en la habitación del paciente, sin depender solo del teléfono.
+
+    \item \textbf{Actualizar la información con más frecuencia.} La versión gratuita de ThingSpeak, que se usa como \textit{broker}, solo acepta un envío cada 15 segundos, por lo que cada signo vital tarda aproximadamente 160 segundos en actualizarse. Cambiar a otra plataforma permitiría ver los datos casi al instante.
+
+    \item \textbf{Monitorear varios pacientes a la vez.} Se propone que la aplicación permita seguir a varios pacientes y asignarlos a distintos miembros del personal.
+\end{enumerate}
 
 \newpage
 
