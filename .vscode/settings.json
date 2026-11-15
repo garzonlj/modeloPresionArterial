@@ -1,0 +1,14 @@
+{
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/.jj": true,
+        "**/.DS_Store": true,
+        "**/Thumbs.db": true,
+        "**/c:\\Users\\Alejandro\\modeloPresionArterial\\docs\\informe_final.aux": true,
+        "**/c:\\Users\\Alejandro\\modeloPresionArterial\\docs\\informe_final.log": true,
+        "**/c:\\Users\\Alejandro\\modeloPresionArterial\\docs\\informe_final.gz": true,
+        "**/c:\\Users\\Alejandro\\modeloPresionArterial\\docs\\informe_final.out": true
+    }
+}
