@@ -634,7 +634,88 @@ En esta sección se presentan los resultados del prototipo construido, las prueb
 
 \subsection{Prototipo del nodo IoT}
 
-sin hacer
+
+El nodo IoT se implementó sobre una Raspberry Pi 3, a la que se conectan los sensores MAX30100 y MLX90614 mediante el bus I2C 1. Ambos sensores comparten las líneas de datos (SDA) y de reloj (SCL), así como la alimentación de 3.3~V y la tierra, y la Raspberry Pi los distingue por su dirección en el bus (0x57 y 0x5A, Tabla \ref{tab:sensores}). Esto permite conectar los dos sensores con solo cuatro cables compartidos y dejar libres los demás pines de la tarjeta. La Tabla \ref{tab:conexiones} presenta las conexiones y la Figura \ref{fig:conexiones} el diagrama de bloques del nodo.
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{l c c c c}
+\toprule
+\textbf{Señal} & \textbf{Pin físico (RPi)} & \textbf{GPIO} & \textbf{MAX30100} & \textbf{MLX90614} \\
+\midrule
+Alimentación 3.3~V & 1 & -- & VIN & VIN \\
+Tierra & 6 & -- & GND & GND \\
+Datos I2C (SDA) & 3 & GPIO2 & SDA & SDA \\
+Reloj I2C (SCL) & 5 & GPIO3 & SCL & SCL \\
+\bottomrule
+\end{tabular}
+\caption{Conexiones de los sensores al bus I2C 1 de la Raspberry Pi 3.}
+\label{tab:conexiones}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+    node distance=0.8cm and 2.2cm,
+    blk/.style={draw, rounded corners, align=center, font=\small, minimum height=1.1cm, text width=3.4cm},
+    arr/.style={-{Stealth}, thick},
+    bus/.style={{Stealth}-{Stealth}, thick},
+    lab/.style={font=\scriptsize, align=center}
+]
+\node[blk, fill=blue!6, minimum height=3.2cm, text width=3.2cm] (rpi) {\textbf{Raspberry Pi 3} \\[2pt] \scriptsize Bus I2C 1 \\ \scriptsize Procesamiento en el borde};
+\node[blk, fill=orange!10, right=of rpi.north east, anchor=north west] (max) {\textbf{MAX30100} (0x57) \\ \scriptsize PPG roja e infrarroja \\ \scriptsize (dedo)};
+\node[blk, fill=orange!10, right=of rpi.south east, anchor=south west] (mlx) {\textbf{MLX90614} (0x5A) \\ \scriptsize Temperatura infrarroja \\ \scriptsize (sin contacto)};
+\node[blk, fill=green!10, left=1.6cm of rpi] (ts) {\textbf{ThingSpeak} \\ \scriptsize \textit{broker} MQTT};
+
+\draw[bus] (rpi.east |- max.west) -- node[lab, above]{SDA, SCL} node[lab, below]{3.3 V, GND} (max.west);
+\draw[bus] (rpi.east |- mlx.west) -- node[lab, above]{SDA, SCL} node[lab, below]{3.3 V, GND} (mlx.west);
+\draw[arr] (rpi.west) -- node[lab, above]{WiFi} node[lab, below]{MQTT/TLS} (ts.east);
+\end{tikzpicture}
+\caption{Diagrama de bloques del nodo IoT.}
+\label{fig:conexiones}
+\end{figure}
+
+La Figura \ref{fig:cableado} muestra el montaje de las conexiones. La Raspberry Pi 3 se instaló dentro de una carcasa y se alimenta por su puerto micro-USB. Para que los dos sensores compartan el bus I2C, las líneas de alimentación, tierra, SDA y SCL se llevan desde los pines de la tarjeta a una protoboard, y desde allí se distribuyen con cables de conexión a cada sensor. Este montaje permitió probar y modificar las conexiones con facilidad durante el desarrollo, aunque, como se discute más adelante, es susceptible a desconexiones si los cables se mueven.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\linewidth]{Cableado.jpeg}
+    \caption{Montaje de las conexiones del nodo: Raspberry Pi 3, protoboard y módulo del MLX90614.}
+    \label{fig:cableado}
+\end{figure}
+
+\subsubsection{Prototipo 1: soporte del brazo y ubicación de los sensores}
+
+Para que las mediciones se tomen siempre en las mismas condiciones, se construyó un primer prototipo de la estructura física del nodo, sobre la cual el paciente apoya el brazo y en la que quedan fijos los sensores. El diseño de esta estructura responde a las condiciones que requiere cada sensor para entregar una lectura confiable:
+
+\begin{enumerate}
+    \item \textbf{Inmovilizar el antebrazo y la mano.} La señal PPG es muy sensible al movimiento: un desplazamiento del dedo produce variaciones en la señal que pueden confundirse con latidos o enmascararlos. Esto afecta en especial a la frecuencia respiratoria, que se obtiene de modulaciones lentas del pulso (0.1 a 0.5~Hz) sobre una ventana de 60 segundos, y al clasificador de presión arterial, que necesita al menos 10 ciclos válidos consecutivos. Un apoyo estable reduce los movimientos del paciente durante esas ventanas.
+
+    \item \textbf{Mantener el dedo sobre el MAX30100 con una presión constante.} Si el dedo presiona demasiado, los capilares se comprimen y la componente AC del pulso disminuye; si presiona muy poco o se separa del sensor, entra luz ambiente y la señal se vuelve ruidosa. Por esta razón el sensor se ubica en una posición fija en la que el dedo descansa de forma natural cuando el brazo está apoyado.
+
+    \item \textbf{Fijar la posición del MLX90614 respecto a la piel.} El termómetro infrarrojo mide la temperatura promedio de todo lo que se encuentra dentro de su campo de visión. Si la distancia a la piel cambia o el sensor apunta parcialmente fuera de ella, la lectura incluye la temperatura del ambiente y disminuye. Por eso el sensor se ubicó en una posición fija, cubierta por la muñeca cuando el brazo está apoyado.
+
+    \item \textbf{Alojar la Raspberry Pi y el cableado.} La estructura integra la tarjeta y los cables del bus I2C, manteniéndolos cortos y fijos para evitar desconexiones y errores de comunicación durante la medición.
+\end{enumerate}
+
+La Figura \ref{fig:prototipo1} presenta el prototipo 1. Se trata de una plataforma elevada sobre dos soportes laterales, con una superficie superior acolchada sobre la que el paciente apoya el antebrazo extendido con la palma hacia abajo. Los sensores se integraron en la superficie según la posición natural del brazo:
+
+\begin{itemize}
+    \item El \textbf{MLX90614} se ubicó al ras de la superficie, justo debajo de la muñeca, de modo que la piel cubre su campo de visión y la distancia al sensor se mantiene constante entre mediciones. Dado que la temperatura de la piel de la muñeca es menor que la temperatura central del cuerpo, la lectura requiere el \textit{offset} de calibración indicado en la Tabla \ref{tab:sensores}.
+    \item El \textbf{MAX30100} se ubicó en el extremo de la plataforma, dentro de una base cilíndrica elevada sobre la que descansa la yema del dedo índice. Esta ubicación hace que el dedo quede sobre el sensor sin que el paciente tenga que mantener una postura forzada.
+    \item La \textbf{Raspberry Pi 3} se alojó en un compartimento debajo de la plataforma, con acceso a sus puertos, lo cual mantiene cortos los cables hacia los sensores y deja la superficie de apoyo libre de cableado.
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{Prototipo.jpeg}
+    \caption{Prototipo 1 del nodo IoT VIGIA: ubicación del MLX90614 bajo la muñeca y del MAX30100 bajo la yema del dedo.}
+    \label{fig:prototipo1}
+\end{figure}
+
+Las pruebas con este prototipo mostraron que la lectura de la SpO\textsubscript{2} y de la frecuencia respiratoria sigue siendo sensible al movimiento y al contacto del dedo con el sensor, lo cual se evidenció en la alerta generada durante las pruebas sin un deterioro real (Figura \ref{fig:alerta}). Por esta razón, para una siguiente versión se propone incorporar una guía o pinza sobre la base del MAX30100 que mantenga una presión constante en el dedo y lo cubra de la luz ambiente, una correa que fije el antebrazo a la plataforma y reemplazar la protoboard por una placa soldada, para evitar que los cables se suelten con el uso.
+
 
 \subsection{Pruebas de funcionamiento}
 
@@ -814,6 +895,12 @@ Aunque VIGIA funciona de principio a fin, hay aspectos que se pueden mejorar en 
     \item \textbf{Evaluar el sistema de alertas al personal médico.} El primer paso será comprobar en la práctica si las notificaciones llegan a tiempo y si el personal las nota de verdad, sobre todo cuando el celular está guardado o la aplicación está cerrada. Si se concluye que las notificaciones no son suficientes, se puede agregar un \textit{buzzer} (una pequeña alarma sonora) en el propio dispositivo. Así, la alerta también se escucharía en la habitación del paciente, sin depender solo del teléfono.
 
     \item \textbf{Actualizar la información con más frecuencia.} La versión gratuita de ThingSpeak, que se usa como \textit{broker}, solo acepta un envío cada 15 segundos, por lo que cada signo vital tarda aproximadamente 160 segundos en actualizarse. Cambiar a otra plataforma permitiría ver los datos casi al instante.
+    \begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\linewidth]{Datos_VIGIA.jpeg}
+    \caption{Pantallas de inicio de sesión, principal y detalle del paciente.}
+    \label{fig:app1}
+\end{figure}
 
     \item \textbf{Monitorear varios pacientes a la vez.} Se propone que la aplicación permita seguir a varios pacientes y asignarlos a distintos miembros del personal.
 \end{enumerate}
